@@ -1,7 +1,7 @@
 import msvcrt
 from os import system
 
-def menu(valasztas) -> None:
+def menu() -> None:
     opciok = setOpciok()
     opciokHosszusag = len(opciok)
     if msvcrt.kbhit():
@@ -10,12 +10,18 @@ def menu(valasztas) -> None:
         system('cls')
         match key:
             case b'+':
-                if(opciokHosszusag != valasztas and (valasztas + 1) < opciokHosszusag): valasztas += 1
+                if(opciokHosszusag != valasztas):
+                    valasztas += 1
+                    print((valasztas + 1) < opciokHosszusag)
+                    print(opciokHosszusag)
             case b'-':
-                if(valasztas != 0): valasztas -= 1
+                if(valasztas != 0):
+                    valasztas -= 1
+                    print(valasztas)
+                    print(opciokHosszusag)
             case b'\r':
                 print(valasztas)
-        for i in range(0, len(opciok), 1):
+        for i in range(0, len(opciok)):
             if(valasztas == i):
                 print(opciok[i] + " !")
             else:
@@ -24,4 +30,5 @@ def menu(valasztas) -> None:
 def setOpciok() -> list:
     return ["1 opcio", "2 opcio", "3 opcio"]
 if __name__ == "__main__":
-    menu()
+    while True:
+        menu(0)
