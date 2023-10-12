@@ -15,15 +15,21 @@ def generateMap(width, height):
         for j in range(0, height, 1):
             alapKocka = TitleKocka(j, i, 0)
             map.append(alapKocka)
+            print(f'{map[j].POS} : {str(map.index(alapKocka))})', end="")
+        print("\n")
+    for i in range(maxWidth, (maxWidth*maxHeight), maxWidth):
+        map[i].setType(-1)
+        print(map[i].getType())
     return map
 
-maxHeight = 3
-maxWidth = 5
+maxHeight = 5
+maxWidth = 7
 
 map = generateMap(maxHeight, maxWidth)
 jatekos.damageFrigyes(90)
 jatekos.addToInventory('Csoki')
 jatekos.addToInventory('Csoki')
+jatekos.POS = [1, 1]
 print(jatekos.INVENTORY)
 JatekFut = True
 valasztas = 0
@@ -35,7 +41,7 @@ while JatekFut:
         if(not ViewBackPack):
             match key:
                 case b'w':
-                    if(not (jatekos.POS[1] + 1 > maxHeight)):
+                    if(map[(jatekos.POSTitle + maxWidth)].getType() != -1):
                         jatekos.moveFrigyes('up')
                 case b's':
                     jatekos.moveFrigyes('do')
@@ -43,18 +49,19 @@ while JatekFut:
                     if(not (jatekos.POS[0] + 1 > maxWidth-1)):
                         jatekos.moveFrigyes('ri')
                 case b'a':
-                    jatekos.moveFrigyes('le')
+                    if(map[(jatekos.POSTitle - maxWidth)].getType() != -1):
+                        jatekos.moveFrigyes('le')
                 case b'b':
                     ViewBackPack = True
-        for j in range(0, len(map)):
-            if(map[j].POS == jatekos.POS):
-                map[j].setSeen()
-                jatekos.POSTitle = j
+            for j in range(0, len(map)):
+                if(map[j].POS == jatekos.POS):
+                    map[j].setSeen()
+                    jatekos.POSTitle = j
         system('cls')
         if(ViewBackPack):
             match key:
                 case b'q':
-                    if((Packvalasztas - 1) > 0): Packvalasztas -=1
+                    if((Packvalasztas - 1) >= 0): Packvalasztas -= 1
                 case b'e':
                     if((Packvalasztas + 1) < len(list(jatekos.INVENTORY.values()))): Packvalasztas += 1
                 case b'x':
@@ -63,7 +70,7 @@ while JatekFut:
                     Packvalasztas = 0
                     gameText.gameUpdate(0)
                 case b'\r':
-                    print(f"USE ITEM {valasztas}")
+                    # print(f"USE ITEM {valasztas}")
                     currentItem = jatekos.getInvetoryKeys()
                     jatekos.useItem(currentItem[Packvalasztas])
                     

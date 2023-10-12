@@ -7,7 +7,7 @@ class Frigyes:
         self.LEVEL = 1
         self.nextLevel = self.LEVEL * 10
         self.HONOR = 50
-        self.POS = [0, 0]
+        self.POS = [1, 1]
         self.POSTitle = 0
     def setPenz(self, amount) -> None:
         self.PENZ = amount
