@@ -1,0 +1,10 @@
+{
+    "keyItems": {
+        "fél_személyi":["Egyetlen nyom a haza utamhoz...", -1],
+        "bicska": ["Rosszfiúkat jól lehet kibökni vele...", -1]
+    },
+    "healItems": {
+        "csoki": [ "12 ÉLETERŐT TÖLT VISSZA", 100, 12],
+        "narancs_lé": ["20 ÉLETERŐT TÖLT VISSZA", 250, 20]
+    }
+}
