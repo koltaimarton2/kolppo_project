@@ -1,30 +1,22 @@
 import pygame
 from globals import *
 from items import items
-class Player((pygame.sprite.Sprite)):
-    def __init__(self, groups, position = (SCREENWIDTH/2, SCREENHEIGHT/2)):
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self, groups, position = (SCREENWIDTH/2, SCREENHEIGHT/2), drawLayer: int = 0, collideTiles: list = []):
         super().__init__(groups)
+        self.drawLayer = drawLayer
+        self.pos = pygame.math.Vector2(position[0], position[1])
         self.sprites = []
         self.animSpeed = 5 / 100000
-        self.sprites.append(pygame.image.load('assets/heroFront1.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroFront2.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroFront3.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroFront4.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroBack1.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroBack2.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroBack3.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroBack4.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroLeft1.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroLeft2.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroLeft3.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroLeft4.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroRight1.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroRight2.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroRight3.png').convert_alpha())
-        self.sprites.append(pygame.image.load('assets/heroRight4.png').convert_alpha())
+        for i in range(1, 17, 1):
+            self.sprites.append(pygame.transform.scale(pygame.image.load(f'assets/hero{i}.png').convert_alpha(), (18, 27)))
         self.current_sprite = 1
         self.image = self.sprites[self.current_sprite]
-        self.rect = self.image.get_rect(topleft = position)
+        self.imageRect = self.image.get_rect(center = self.pos)
+        self.rect = pygame.Rect(self.pos.x, self.pos.y, 10, 10)
+        self.collideTiles = collideTiles
+        self.direction = pygame.math.Vector2()
         self.speed = 150
         self.clock = pygame.time.Clock()
         self.hp = 100
@@ -43,40 +35,66 @@ class Player((pygame.sprite.Sprite)):
         keys = pygame.key.get_pressed()
         deltaTime = self.clock.tick(FPS) / 1000
         if keys[pygame.K_w]: # up - back
-            if(self.current_sprite >= 4 and self.current_sprite <= 7):
-                self.current_sprite += self.animSpeed
-                print(self.current_sprite)
-            else:
-                self.current_sprite = 4
-            self.rect.y -= self.speed * deltaTime
-        if keys[pygame.K_s]: # down - front
             if(self.current_sprite >= 0 and self.current_sprite <= 3):
                 self.current_sprite += self.animSpeed
             else:
                 self.current_sprite = 0
-            self.rect.y += self.speed * deltaTime
+            self.pos.y -= self.speed * deltaTime
+            self.direction.y = -1
+        elif keys[pygame.K_s]: # down - front
+            if(self.current_sprite >= 4 and self.current_sprite <= 7):
+                self.current_sprite += self.animSpeed
+            else:
+                self.current_sprite = 4
+            self.pos.y += self.speed * deltaTime
+            self.direction.y = 1
+        else: self.direction.y = 0
         if keys[pygame.K_a]: # left - left
             if(self.current_sprite >= 8 and self.current_sprite <= 11):
                 self.current_sprite += self.animSpeed
             else:
                 self.current_sprite = 8
-            self.rect.x -= self.speed * deltaTime
-        if keys[pygame.K_d]: # right - right
+            self.pos.x -= self.speed * deltaTime
+            self.direction.x = -1
+        elif keys[pygame.K_d]: # right - right
             if(self.current_sprite >= 12 and self.current_sprite <= 15):
                 self.current_sprite += self.animSpeed
             else:
                 self.current_sprite = 12
-            self.rect.x += self.speed * deltaTime
+            self.pos.x += self.speed * deltaTime
+            self.direction.x = 1
+        else: self.direction.x = 0
         if keys[pygame.K_LSHIFT]:
             self.animSpeed = 0.15
-            self.speed = 300
+            self.speed = 150
         else:
             self.animSpeed = 0.1
-            self.speed = 150
+            self.speed = 100
         self.image = self.sprites[int(self.current_sprite)]
 
     def update(self):
+        self.CheckCollision(self.collideTiles)
+        self.rect.center = self.pos
         self.input()
+
+    def CheckCollision(self, tiles: list = []):
+        collTol = 3
+        for tile in tiles:
+            if self.rect.colliderect(tile):
+                if self.direction.x == -1:
+                    print("left")
+                    self.pos.x = (tile.rect.left + self.imageRect.w) + collTol
+                if self.direction.x == 1:
+                    print("right")
+                    self.pos.x = (tile.rect.right - self.imageRect.w) - collTol
+                if self.direction.y == -1:
+                    print("bottom")
+                    self.pos.y = (tile.rect.top + self.imageRect.h) + collTol
+                if self.direction.y == 1:
+                    print("top")
+                    self.pos.y = (tile.rect.bottom - self.imageRect.h) - collTol
+                self.direction = pygame.math.Vector2(0, 0)
+                
     # ------------------------------------------ Get Stuff
     def getSpeed(self):
         return self.speed
