@@ -1,38 +1,34 @@
 import pygame
 from globals import *
-from sprite import Object
+from mapLoad import mapLoader, loadElement, textElement
+from playerCamera import cameraGroup
 from Player import Player
-from button import Button
 class DefaultScene:
     def __init__(self, game):
         self.game = game
-
-        self.sprites = pygame.sprite.Group()
-        self.player = Player([self.sprites])
+        self.sprites = cameraGroup()
+        mapData = mapLoader('data/maps/testRoom.tmx', self.sprites)
+        self.player = Player([self.sprites], drawLayer=1, collideTiles=mapData.get_CollideTiles())
         self.game.globalPlayer = self.player
     def update(self):
         self.sprites.update()
     def draw(self):
         self.game.screen.fill('lightblue')
         self.update()
-        self.sprites.draw(self.game.screen)
+        self.sprites.draw(self.player)
 
 
 class EscapeMenuScene:
     def __init__(self, game):
         self.game = game
         self.selectedItem = 0
-        Conbutton = Button(None, (400, 350), "Folyatatás", FONT, (128, 128, 128), (255, 255, 255))
-        Optbutton = Button(None, (400, 400), "Beállítások", FONT, (128, 128, 128), (255, 255, 255))
-        Quitbutton = Button(None, (400, 450), "Kilépés", FONT, (128, 128, 128), (255, 255, 255))
+        self.buttonGroups = pygame.sprite.Group()
+        Conbutton = textElement(self.buttonGroups, "Folyatatás",  (400, 350))
+        Optbutton = textElement(self.buttonGroups, "Beállítások", (400, 400))
+        Quitbutton = textElement(self.buttonGroups, "Kilépés", (400, 450))
         self.buttons = [Conbutton, Optbutton, Quitbutton]
-    def draw(self):
-        self.game.screen.fill((22, 22, 22))
-        for idx, button in enumerate(self.buttons):
-            button.changeColor(False)
-            if (idx == self.selectedItem):
-                button.changeColor(True)
-            button.update(self.game.screen)
+    def update(self):
+        self.buttonGroups.update()
         canUse = selectHandle(self, len(self.buttons))
         if canUse:
             match self.selectedItem:
@@ -43,6 +39,13 @@ class EscapeMenuScene:
                 case 2:
                     self.game.runInstance = False
             canUse = False
+    def draw(self):
+        self.game.screen.fill((22, 22, 22))
+        for idx, button in enumerate(self.buttons):
+            if (idx == self.selectedItem):
+                button.changeColor(True)
+            else: button.changeColor(False)
+        self.update()
 
 class BackPackScene:
     def __init__(self, game):
@@ -69,14 +72,50 @@ class BackPackScene:
             canUse = False
             self.selectedItem = 0
 
+class fightScene:
+    def __init__(self, game, enemy = None) -> None:
+        self.game = game
+        self.selectedItem = 0
+        self.fightSprites = pygame.sprite.Group()
+        fightButton = textElement(self.fightSprites, 'Támadás', (100, SCREENHEIGHT-150))
+        statsButton = textElement(self.fightSprites, 'Statok', (300, SCREENHEIGHT-150))
+        itemsButton = textElement(self.fightSprites, 'Hátizsák', (500, SCREENHEIGHT-150))
+        runawayButton = textElement(self.fightSprites, 'Meneküles', (700, SCREENHEIGHT-150))
+        self.buttons = [fightButton, statsButton, itemsButton, runawayButton]
+    def update(self):
+        self.fightSprites.update()
+        canUse = selectHandle(self, len(self.buttons))
+        if canUse: 
+            match self.selectedItem:
+                case 0:
+                    print("Támadás")
+                case 1:
+                     print("Statok")
+                case 2:
+                    print("Itemek")
+                case 3:
+                    print("Menekülés")
+            self.selectedItem = 0
+            canUse = False
+    def draw(self):
+        self.game.screen.fill((22, 22, 22))
+        for idx, button in enumerate(self.buttons):
+            if (idx == self.selectedItem):
+                self.selectedButton = loadElement(self.fightSprites, "assets/UIselected.png", (150, 150), button.rect.center)
+                button.changeColor(True)
+            else:
+                self.activeButton = loadElement(self.fightSprites, "assets/UIav.png", (150, 150), button.rect.center)
+                button.changeColor(False)
+        self.update()
+        
 
 def selectHandle(self, maxCount) -> int:
-    if self.game.globalEvent.key == pygame.K_DOWN or self.game.globalEvent.key == pygame.K_s: 
+    if self.game.globalEvent.key == pygame.K_DOWN or self.game.globalEvent.key == pygame.K_RIGHT or self.game.globalEvent.key == pygame.K_s or self.game.globalEvent.key == pygame.K_d: 
         if (self.selectedItem + 1) < maxCount: self.selectedItem += 1
         else: self.selectedItem = 0
         self.game.globalEvent.key = pygame.KSCAN_SLASH
         return False
-    if self.game.globalEvent.key == pygame.K_UP or self.game.globalEvent.key == pygame.K_w:
+    if self.game.globalEvent.key == pygame.K_UP or self.game.globalEvent.key == pygame.K_LEFT or self.game.globalEvent.key == pygame.K_w or self.game.globalEvent.key == pygame.K_a:
         if ((self.selectedItem - 1) >= 0): self.selectedItem -= 1
         else: self.selectedItem = maxCount- 1
         self.game.globalEvent.key = pygame.KSCAN_SLASH
