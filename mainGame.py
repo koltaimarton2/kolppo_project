@@ -1,7 +1,7 @@
 import pygame
-from scene import DefaultScene, EscapeMenuScene, BackPackScene, fightScene
-
+from scene import *
 from globals import *
+
 class kollpoCity:
     def __init__(self):
         pygame.init()
@@ -14,7 +14,7 @@ class kollpoCity:
         self.globalEvent = 0
         self.globalPlayer = None
         self.deltaTime = 0.0
-        self.scenes = [DefaultScene(self), EscapeMenuScene(self), BackPackScene(self), fightScene(self)]
+        self.scenes = [DefaultScene(self), EscapeMenuScene(self), BackPackScene(self)]
 
     def Start(self):
         if(not pygame.get_init()): return
@@ -25,11 +25,8 @@ class kollpoCity:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE: self.isItActive(1)
                     if event.key == pygame.K_b: self.isItActive(2)
-                    if event.key == pygame.K_m: self.isItActive(3)
-                    if event.key == pygame.K_z: self.isItActive(3)
                     self.globalEvent = event
             self.scenes[self.screenType].draw()
-
             self.deltaTime = self.clock.tick(FPS) / 1000
             pygame.display.update()
         pygame.quit()
@@ -37,6 +34,11 @@ class kollpoCity:
     def isItActive(self, Stype):
         if(self.screenType != Stype and self.screenType == 0): self.screenType = Stype
         else: self.screenType = 0
+    def newFight(self, enemy):
+        self.scenes.append(fightScene(self, enemy))
+        self.isItActive(3)
+    def endFight(self):
+        self.isItActive(3)
         
 if __name__ == "__main__":
     newGame = kollpoCity()
