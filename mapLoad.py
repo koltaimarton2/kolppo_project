@@ -27,11 +27,12 @@ class loadElement(pygame.sprite.Sprite):
     def update(self):
         dSurface = pygame.display.get_surface()
         dSurface.blit(self.image, self.rect)
+
 class textElement(pygame.sprite.Sprite):
-    def __init__(self, groups, textInput, position = (0, 0)):
+    def __init__(self, groups, textInput, position = (0, 0), fontSize: int = 24):
         super().__init__(groups)
         self.text = textInput
-        self.font = BIGFONT
+        self.font = pygame.font.Font('fonts/pixel.ttf', fontSize)
         self.base_color, self.hovering_color = (128, 128, 128), (255, 255, 255)
         self.textSurface = self.font.render(self.text, True, self.base_color)
         self.rect = self.textSurface.get_rect(center = position)
