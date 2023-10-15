@@ -17,12 +17,18 @@ class Player(pygame.sprite.Sprite):
         self.rect = pygame.Rect(self.pos.x, self.pos.y, 10, 10)
         self.collideTiles = collideTiles
         self.direction = pygame.math.Vector2()
-        self.speed = 150
         self.clock = pygame.time.Clock()
+
+        # - STATS
+        self.isDead = False
+        self.speed = 150
         self.hp = 100
+        self.attackDamage = 25
+        self.attackSpeed = 0.93
         self.balance = 1000
         self.xp = 2
         self.level = 1
+        self.nextLevel = self.level * 10
         self.honor = 50
         self.playerRun = False
         self.frozen = False
@@ -84,13 +90,13 @@ class Player(pygame.sprite.Sprite):
                 if self.direction.x == -1:
                     print("left")
                     self.pos.x = (tile.rect.left + self.imageRect.w) + collTol
-                if self.direction.x == 1:
+                elif self.direction.x == 1:
                     print("right")
                     self.pos.x = (tile.rect.right - self.imageRect.w) - collTol
-                if self.direction.y == -1:
+                elif self.direction.y == -1:
                     print("bottom")
                     self.pos.y = (tile.rect.top + self.imageRect.h) + collTol
-                if self.direction.y == 1:
+                elif self.direction.y == 1:
                     print("top")
                     self.pos.y = (tile.rect.bottom - self.imageRect.h) - collTol
                 self.direction = pygame.math.Vector2(0, 0)
@@ -122,9 +128,7 @@ class Player(pygame.sprite.Sprite):
 
     def damage(self, amount) -> bool:
         self.hp -= amount
-        if(self.hp <= 0):
-            return True
-        else: return False
+        if self.hp == 0: self.isDead = True
     
     # ------------------------------------------ Add to Stuff
 
@@ -142,12 +146,18 @@ class Player(pygame.sprite.Sprite):
         self.xp += amount
         self.checkForLevelUp()
 
+    def addMoney(self, amount) -> None:
+        self.balance += amount
+
     def Heal(self, amount):
         if(not ((self.hp+amount) > 100)):
             self.hp += amount
         else: self.hp = 100
 
     # ------------------------------------------ Handle Stuff
+
+    def attack(self, target):
+        target.damage(self.attackDamage)
 
     def useItem(self, item) -> None:
         if (item.group == "keyItems"): return
