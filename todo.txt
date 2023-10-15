@@ -1,0 +1,5 @@
+Bolt menü - > epület, bejárat, új epület map betötltése
+Fight screen véglegessé csinálása
+Halál screen
+Spawnpointok - > sprite, interaktálás vele
+player - > interaktálás eszközzel, ajtó stb...
