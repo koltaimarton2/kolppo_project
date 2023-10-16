@@ -1,81 +1,107 @@
 import msvcrt
-from os import system
-from Frigyes import Frigyes
-from title import TitleKocka
-from terminalText import Terminal
 from time import sleep
+from os import system
+from colors import colors
 
-jatekos = Frigyes()
-gameText = Terminal(jatekos)
-gameText.gameUpdate(0)
+FPS = 60
 
-def generateMap(width, height):
-    map = []
-    for i in range(0, width, 1):
-        for j in range(0, height, 1):
-            alapKocka = TitleKocka(j, i, 0)
-            map.append(alapKocka)
-            print(f'{map[j].POS} : {str(map.index(alapKocka))})', end="")
-        print("\n")
-    for i in range(maxWidth, (maxWidth*maxHeight), maxWidth):
-        map[i].setType(-1)
-        print(map[i].getType())
-    return map
+class Entity:
+    def __init__(self, position: tuple = (0, 0), HealthPoint: int = 100, attackDamage: int = 10, attackSpeed: float = 1, level: int = 1):
+        self.isDead = False
+        self.hp = HealthPoint
+        self.attackDamage = attackDamage
+        self.attackSpeed = attackSpeed
+        self.level = level
 
-maxHeight = 5
-maxWidth = 7
+    def update(self):
+        pass
 
-map = generateMap(maxHeight, maxWidth)
-jatekos.damageFrigyes(90)
-jatekos.addToInventory('Csoki')
-jatekos.addToInventory('Csoki')
-jatekos.POS = [1, 1]
-print(jatekos.INVENTORY)
-JatekFut = True
-valasztas = 0
-Packvalasztas = 0
-ViewBackPack = False
-while JatekFut:
-    if msvcrt.kbhit():
-        key = bytes(msvcrt.getch())
-        if(not ViewBackPack):
-            match key:
-                case b'w':
-                    if(map[(jatekos.POSTitle + maxWidth)].getType() != -1):
-                        jatekos.moveFrigyes('up')
-                case b's':
-                    jatekos.moveFrigyes('do')
-                case b'd':
-                    if(not (jatekos.POS[0] + 1 > maxWidth-1)):
-                        jatekos.moveFrigyes('ri')
-                case b'a':
-                    if(map[(jatekos.POSTitle - maxWidth)].getType() != -1):
-                        jatekos.moveFrigyes('le')
-                case b'b':
-                    ViewBackPack = True
-            for j in range(0, len(map)):
-                if(map[j].POS == jatekos.POS):
-                    map[j].setSeen()
-                    jatekos.POSTitle = j
-        system('cls')
-        if(ViewBackPack):
-            match key:
-                case b'q':
-                    if((Packvalasztas - 1) >= 0): Packvalasztas -= 1
-                case b'e':
-                    if((Packvalasztas + 1) < len(list(jatekos.INVENTORY.values()))): Packvalasztas += 1
-                case b'x':
-                    ViewBackPack = False
-                    system('cls')
-                    Packvalasztas = 0
-                    gameText.gameUpdate(0)
-                case b'\r':
-                    # print(f"USE ITEM {valasztas}")
-                    currentItem = jatekos.getInvetoryKeys()
-                    jatekos.useItem(currentItem[Packvalasztas])
-                    
-            
-            if(ViewBackPack): gameText.gameUpdate(1, Packvalasztas)
-        else:
-            gameText.gameUpdate(0)
-            Packvalasztas = 0
+    def hurt(self, attackDamage):
+        self.hp -= attackDamage
+        if(self.hp >= 0):
+            self.hp = 0
+            self.isDead = True
+    
+    def heal(self, healAmount):
+        self.hp += healAmount
+        if(self.hp > 100):
+            self.hp = 100
+
+class Player(Entity):
+    def __init__(self, game = None, position: tuple = (0, 0), HealthPoint: int = 100, attackDamage: int = 25, attackSpeed: float = 0.58, level: int = 1):
+        super().__init__(position, HealthPoint, attackDamage, attackSpeed, level)
+        self.game = game
+        self.selectedItem = 0
+        self.balance = 1000
+        self.xp = 2
+        self.nextLevel = self.level * 10
+        self.honor = 50
+        self.playerInvetory = {}
+        self.invetoryKeys = []
+        self.invetoryValues = []
+        #self.HandleInventoryUpdate()
+
+    def Move(self, direction):
+        match direction:
+            case 0: # előre
+                self.position[0] += 1
+            case 1: # hátra
+                self.position[0] -= 1
+            case 2: # jobbra
+                self.position[1] -= 1
+            case 3: # balra
+                self.position[1] += 1
+
+class Scene:
+    def __init__(self, game = None, opts = ["Észak felé menni", "Dél felé menni", "Kelet felé menni", "Nyugat felé menni"]):
+        self.opts = opts
+        self.game = game
+        self.selectedItem = 0
+        self.maxCount = len(self.opts)
+    def update(self):
+        for idx, opt in enumerate(self.opts):
+            if(idx == self.selectedItem): print(f'{colors.bg.lightgrey}{opt}{colors.reset}')
+            else: print(opt)
+
+    def returnOpt(self) -> int:
+        return self.selectedItem
+
+    def handleSelect(self):
+        match self.game.globalKey:
+            case b'd':
+                if (self.selectedItem + 1) < self.maxCount: self.selectedItem += 1
+                else: self.selectedItem = 0
+            case b'a':
+                if ((self.selectedItem - 1) >= 0): self.selectedItem -= 1
+                else: self.selectedItem = self.maxCount - 1
+            case b'q':
+                self.game.globalKey = "quit"
+            case b'\r':
+                self.selectedItem = 0
+
+class Game:
+    def __init__(self):
+        self.RUNINSTANCE = True
+        self.globalKey = None
+        self.globalPlayer = Player(self)
+        defScene = Scene(self)
+        self.sceneList = [defScene]
+        self.sceneIndex = 0
+
+    def Start(self):
+        self.sceneList[self.sceneIndex].update()
+        while self.RUNINSTANCE:
+            if(self.globalKey == "quit"):
+                self.RUNINSTANCE = False
+                return
+            if msvcrt.kbhit():
+                system('cls')
+                self.globalKey = bytes(msvcrt.getch())
+                self.sceneList[self.sceneIndex].handleSelect()
+                self.sceneList[self.sceneIndex].update()
+                #self.inputHandle.update()
+            sleep(FPS / 1000)
+
+if __name__ == "__main__":
+    jatek = Game()
+    jatek.Start()
