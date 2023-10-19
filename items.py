@@ -29,7 +29,7 @@ class healItem(Item):
         self.getData("healAmount")
     def use(self, player):
         player.Heal(self.stats["healAmount"])
-        print(f"Healed : {self.stats["healAmount"]}")
+        print(f"Healed : {self.stats['healAmount']}")
 
 items = {
     "Fél személyi":Item("Fél személyi"), 
