@@ -2,10 +2,11 @@ from colors import colors
 from globals import gameGlobals
 from time import sleep
 class Scene:
-    def __init__(self, group: list, opts = ["Opt1", "Opt2"], promt: str = "Hello World"):
+    def __init__(self, group: list, opts = ["Opt1", "Opt2"], promt: str = "Hello World", sceneID = ""):
         self.opts = opts
         self.promt = promt
         self.printedSlow = True
+        self.sceneID = sceneID
         group.append(self)
         self.select = 0
         self.selectedItem = -1

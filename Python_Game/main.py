@@ -9,9 +9,9 @@ from entity import Player
 class Game:
     def __init__(self):
         self.RUNINSTANCE = True
-        self.sceneList = []
+        self.sceneList = {}
         self.sceneChange = False
-        self.sceneIndex = 0
+        self.sceneIndex = "1A"
 
     def Start(self):
         global gameGlobals
@@ -30,9 +30,9 @@ class Game:
 
     def addScene(self, scenes: list = []):
         for scene in scenes:
-            self.sceneList.append(scene)
+            self.sceneList[scene.sceneID] = scene
             print(f'[+] Added scene - {scene}')
-            print(f'[+] New scene index - {scenes.index(scene)}')
+            print(f'[+] New scene index - {scene.sceneID}')
     
     def setScene(self, sceneIndex: int = -1):
         lenScene = len(self.sceneIndex)
