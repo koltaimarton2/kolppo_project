@@ -24,7 +24,6 @@ class Scene:
             if(idx == self.select): print(f'{colors.bg.lightgrey}{opt}{colors.reset}')
             else: print(opt)
         if(hasattr(gameGlobals, "globalPlayer")): gameGlobals.globalPlayer.getStats()
-        self.handleSelect()
 
     def nextScene(self):
         pass
@@ -34,15 +33,16 @@ class Scene:
 
     def handleSelect(self):
         global gameGlobals
-        print(f'Scene - {gameGlobals.globalKey}')
         if(hasattr(gameGlobals, "globalKey")):
             match gameGlobals.globalKey:
                 case b'w':
                     if (self.select + 1) < self.maxCount: self.select += 1
                     else: self.select = 0
+                    self.update()
                 case b's':
                     if ((self.select - 1) >= 0): self.select -= 1
                     else: self.select = self.maxCount - 1
+                    self.update()
                 case b'q':
                     gameGlobals.globalKey = "quit"
                 case b'\r':
@@ -50,3 +50,13 @@ class Scene:
                     self.select = 0
                     self.nextScene()
         else: pass
+
+class waitScene(Scene):
+    def __init__(self, group: list, promt: str = "", sceneID="", nextID:str = "", opts=["..."]):
+        super().__init__(group, opts, promt, sceneID)
+        self.nextID = nextID
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene(self.nextID)

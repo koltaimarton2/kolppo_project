@@ -10,7 +10,8 @@ class Game:
     def __init__(self):
         self.RUNINSTANCE = True
         self.sceneList = {}
-        self.sceneChange = False
+        self.debug = False
+        self.sceneChange = True
         self.sceneIndex = "1A"
 
     def Start(self):
@@ -24,22 +25,29 @@ class Game:
             if msvcrt.kbhit():
                 gameGlobals.globalKey = bytes(msvcrt.getch())
                 system('cls')
-                print(f'Scene index : {self.sceneIndex}')
+                self.sceneList[self.sceneIndex].handleSelect()
+            
+            if self.sceneChange:
+                system('cls')
                 self.sceneList[self.sceneIndex].update()
+                self.sceneChange = False
             sleep(gameGlobals.FPS / 1000)
 
     def addScene(self, scenes: list = []):
         for scene in scenes:
             self.sceneList[scene.sceneID] = scene
-            print(f'[+] Added scene - {scene}')
-            print(f'[+] New scene index - {scene.sceneID}')
+            if self.debug:
+                print(f'[+] Added scene - {scene}')
+                print(f'[+] New scene index - {scene.sceneID}')
     
     def setScene(self, sceneIndex: int = -1):
-        lenScene = len(self.sceneIndex)
-        if(not ((lenScene + 1) > lenScene)):
+        sceneList = list(self.sceneList.keys())
+        sceneLen = len(sceneList)
+        if(not ((sceneList.index(sceneIndex) + 1) > sceneLen)):
             self.sceneIndex = sceneIndex
-            print(f'[+] Changed the scene to - {sceneIndex}')
-        else: print("[-] Can't change scene already at last scene")
+            if self.debug: print(f'[+] Changed the scene to - {sceneIndex}')
+            self.sceneChange = True
+        elif self.debug: print("[-] Can't change scene already at last scene")
 def init():
     global gameGlobals
     gameGlobals.globalPlayer = Player()
