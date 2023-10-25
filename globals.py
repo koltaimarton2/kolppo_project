@@ -1,8 +1,7 @@
-import pygame
-pygame.font.init()
+from entity import Player
 
-SCREENWIDTH, SCREENHEIGHT = 800, 800
-FPS = 60
-TILESIZE = 16
-FONT = pygame.font.Font('fonts/pixel.ttf', 12)
-BIGFONT = pygame.font.Font('fonts/pixel.ttf', 24)
+class globals:
+    globalPlayer = Player()
+    FPS = 60
+    globalKey = 0
+    globalGame = None
