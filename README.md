@@ -7,3 +7,5 @@ A csoport tagjai:
 - Lipot József Zoltán
 - Makkos Péter
 - Koltai Márton Balázs
+
+A játéknak több vége van, így akár órákon keresztül is le tud fogni.
