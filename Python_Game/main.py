@@ -3,6 +3,7 @@ from time import sleep
 from os import system
 from globals import gameGlobals
 from LScenes import initScene
+from Kscene import InitKScene
 from entity import Player
 
 class Game:
@@ -44,6 +45,7 @@ def init():
     gameGlobals.globalPlayer = Player()
     gameGlobals.globalGame = Game()
     initScene()
+    InitKScene()
     gameGlobals.globalGame.Start()
 
 
