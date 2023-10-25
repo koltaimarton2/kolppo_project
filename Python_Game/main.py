@@ -12,7 +12,7 @@ class Game:
         self.sceneList = {}
         self.debug = False
         self.sceneChange = True
-        self.sceneIndex = "5A"
+        self.sceneIndex = "1A"
 
     def Start(self):
         global gameGlobals
