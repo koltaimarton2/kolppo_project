@@ -9,8 +9,10 @@ class ShopScene(Scene):
             case 0:
                 gameGlobals.globalGame.sceneIndex += 1
 def InitKScene():
-    scene = []
-    ShopScene(scene, ["Jobbra mész", "Balra mész"] )
+    global gameGlobals
+    scenes = []
+    ShopScene(scenes, ["Jobbra mész", "Balra mész"] )
+    gameGlobals.globalGame.addScene(scenes)
     
 
 
