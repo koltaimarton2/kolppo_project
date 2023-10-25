@@ -22,6 +22,7 @@ class Player(Entity):
         super().__init__(HealthPoint)
         self.selectedItem = 0
         self.balance = 1000
+        self.hasWeapon = False
 
 
     def getHpText(self):

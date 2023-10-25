@@ -19,7 +19,9 @@ class Scene:
                 sleep(0.1)
             print('\n')
             self.printedSlow = False
-        else: print(self.promt)
+        else: 
+            print(self.promt)
+            print("\n")
         for idx, opt in enumerate(self.opts):
             if(idx == self.select): print(f'{colors.bg.lightgrey}{opt}{colors.reset}')
             else: print(opt)
@@ -35,11 +37,11 @@ class Scene:
         global gameGlobals
         if(hasattr(gameGlobals, "globalKey")):
             match gameGlobals.globalKey:
-                case b'w':
+                case b's':
                     if (self.select + 1) < self.maxCount: self.select += 1
                     else: self.select = 0
                     self.update()
-                case b's':
+                case b'w':
                     if ((self.select - 1) >= 0): self.select -= 1
                     else: self.select = self.maxCount - 1
                     self.update()
