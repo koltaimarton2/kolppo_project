@@ -1,6 +1,8 @@
 from colors import colors
 from globals import gameGlobals
 from time import sleep
+import msvcrt
+from os import system
 class Scene:
     def __init__(self, group: list, opts = ["Opt1", "Opt2"], promt: str = "Hello World", sceneID = ""):
         self.opts = opts
@@ -15,6 +17,13 @@ class Scene:
         global gameGlobals
         if self.printedSlow:
             for char in self.promt:
+                if msvcrt.kbhit(): # skip slow text
+                    skipKey = bytes(msvcrt.getch())
+                    if skipKey == b'\r':
+                        system('cls')
+                        print(self.promt)
+                        self.printedSlow = False
+                        break
                 print(char, end="")
                 sleep(0.1)
             print('\n')
@@ -30,11 +39,14 @@ class Scene:
     def nextScene(self):
         pass
 
-    def addOpts(self, optText: str = ""):
+    def addOpt(self, optText: str = ""):
         self.opts.append(optText)
+        self.select = 0
+        self.maxCount += 1
 
     def handleSelect(self):
         global gameGlobals
+        print(f'Selected Item : {self.select}')
         if(hasattr(gameGlobals, "globalKey")):
             match gameGlobals.globalKey:
                 case b's':
@@ -51,6 +63,8 @@ class Scene:
                     self.selectedItem = self.select
                     self.select = 0
                     self.nextScene()
+                case _:
+                    self.update()
         else: pass
 
 class waitScene(Scene):
