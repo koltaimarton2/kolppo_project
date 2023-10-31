@@ -10,7 +10,7 @@ def InitKScene():
     VEndingScene(scenes, ["Újrakezdés"])
     gameGlobals.globalGame.addScene(scenes)
 class ShopScene(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "Az életerőd 100-ra növekszik", sceneid = "1A"):
+    def __init__(self, group: list, opts=..., promt: str = "Az életerőd 100-ra növekszik", sceneid = "1B"):
         super().__init__(group, opts, promt, sceneid)
     def nextScene(self):
         global gameGlobals
