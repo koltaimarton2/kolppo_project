@@ -46,7 +46,6 @@ class Scene:
 
     def handleSelect(self):
         global gameGlobals
-        print(f'Selected Item : {self.select}')
         if(hasattr(gameGlobals, "globalKey")):
             match gameGlobals.globalKey:
                 case b's':

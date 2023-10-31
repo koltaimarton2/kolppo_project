@@ -23,6 +23,7 @@ class Player(Entity):
         self.selectedItem = 0
         self.balance = 1000
         self.hasWeapon = False
+        self.goodToGuy = False
 
 
     def getHpText(self):
