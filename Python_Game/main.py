@@ -4,6 +4,7 @@ from os import system
 from globals import gameGlobals
 from LScenes import initScene
 from Kscene import InitKScene
+from Mscene import InitMscene
 from entity import Player
 
 class Game:
@@ -54,6 +55,7 @@ def init():
     gameGlobals.globalGame = Game()
     initScene()
     InitKScene()
+    InitMscene()
     gameGlobals.globalGame.Start()
 
 
