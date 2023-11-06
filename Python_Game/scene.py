@@ -91,12 +91,12 @@ class inputBalScene(Scene):
                 case b'w':
                     if gameGlobals.globalPlayer.balance >= (self.amount[0] + addAmount): self.amount[0] += addAmount
                     else: pass
-                    print(f'Added to amount {self.amount[0]}')
+                    #print(f'Added to amount {self.amount[0]}')
                     self.update()
                 case b's':
                     if (self.amount[0] - addAmount) != 0: self.amount[0] -= addAmount
                     else: pass
-                    print(f'Taken from amount {self.amount[0]}')
+                    #print(f'Taken from amount {self.amount[0]}')
                     self.update()
                 case b'q':
                     gameGlobals.globalKey = "quit"
@@ -112,9 +112,7 @@ class inputBalScene(Scene):
 
     def nextScene(self):
         global gameGlobals
-        match self.selectedItem:
-            case 0:
-                gameGlobals.globalGame.setScene(self.nextID)
+        gameGlobals.globalGame.setScene(self.nextID)
 
 class inputCodeScene(Scene):
     def __init__(self, group: list, promt: str = "", sceneID="", nextGoodID:str = "", nextBadID:str = ""):

@@ -17,9 +17,22 @@ def initScene():
     lookAroundUnluckyScene = waitScene(scenes, ["Nem találtál semmit.\nEzért inkább úgy döntesz elrakod magad holnapra."], "10A", "12A") # 10A
     lookAroundLuckyScene(scenes, ["Tovább állsz.."]) # 11A
     goOutHotelScene(scenes, ["Jobbra mész", "Balra veszed az irányt"]) # 12A
-    casinoScene(scenes, ["Adsz neki valamennyi pénz:\n", "Visszautasítod."]) # 13A
+    casinoScene(scenes, ["Adsz neki valamennyi pénz", "Visszautasítod."]) # 13A
     doubleItScene(scenes) # 14A
-    trySafe(scenes, "Szerencsére úgy tűnik nincs itt senki ezért oda sietsz és megpróbálód kinyitni.")
+    infrontOfCasino(scenes, ["Igen benézek", "Nem tovább állok"]) # 15A
+    insideTheCasino(scenes, ["Leülsz pokerezni", "Leülsz egy-két kör roulettre", "Körül nézel"]) # 16A
+    lookAroundTheCasino(scenes, ["Felmész a lifttel", "Leszöksz a lépcsőkön át."]) #17A
+    goUpWithLift(scenes, ["Bemész a bárba", "Inkább lemész a lepcsőkön"]) # 18A
+    goDownWithStairs(scenes, ["Megpróbálod kinyitni"]) # 19A
+    canOpenIt(scenes) # 20A
+    cannotOpenIt(scenes) # 21A
+    trySafe(scenes, "Szerencsére úgy tűnik nincs itt senki ezért oda sietsz és megpróbálód kinyitni.") # 22A
+    alleyScene(scenes) # 23A
+    alleyGoodScene(scenes) # 24A
+    alleyBadScene(scenes) # 25A
+    rouletteScene(scenes, ["Felek (1x)", "Tucatok (2x)", "Oszlopok (2x)", "Konkret szam (35x)", "Szinek (1x)"]) # 26A
+    jailEnding(scenes) # 2E
+    wealthyEnding(scenes) # 3E
     gameGlobals.globalGame.addScene(scenes) 
 
 class startScene(Scene):
@@ -54,9 +67,8 @@ class runOrTakeScene(Scene):
                 gameGlobals.globalGame.setScene("1C")
             case 1: # Megköszönöd, és egyből a boltba mész
                 gameGlobals.globalPlayer.goodToGuy = True
+                gameGlobals.globalPlayer.heal(80)
                 gameGlobals.globalGame.setScene("1B")
-                
-                
 
 class cityScene(Scene):
     def __init__(self, group: list, opts=..., promt: str = "Város elején kötsz ki.", sceneID="5A"):
@@ -98,19 +110,17 @@ class lookAroundLuckyScene(Scene):
 class goOutHotelScene(Scene):
     def __init__(self, group: list, opts=..., promt: str = "Elhagyod a motelt és új irányt veszel.", sceneID="12A"):
         super().__init__(group, opts, promt, sceneID)
-        gameGlobals.globalPlayer.balance += 200
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
             case 0: # Jobbra mész
-                pass
+                gameGlobals.globalGame.setScene("23A")
             case 1: # Balra mész
                 gameGlobals.globalGame.setScene("13A")
 
 class casinoScene(Scene):
     def __init__(self, group: list, opts=..., promt: str = "Egy kaszinó előtt kötsz ki.\nEgy furcsa ember megközelít, hogy adj neki pénzt amit ő megdupláz neked.", sceneID="13A"):
         super().__init__(group, opts, promt, sceneID)
-        gameGlobals.globalPlayer.balance += 200
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
@@ -120,7 +130,7 @@ class casinoScene(Scene):
                 gameGlobals.globalGame.setScene("15A")
 
 class doubleItScene(inputBalScene):
-    def __init__(self, group: list, promt: str = "Mennyit pénzt áldozol fel?\n(W - emeled az összeget, S - csökkented az összeget)", sceneID="14A", nextID: str = "15A"):
+    def __init__(self, group: list, promt: str = "Mennyi pénzt áldozol fel?\n(W - emeled az összeget, S - csökkented az összeget)", sceneID="14A", nextID: str = "15A"):
         super().__init__(group, promt, sceneID, nextID)
     def doTheThing(self, bal):
         global gameGlobals
@@ -130,19 +140,17 @@ class doubleItScene(inputBalScene):
 class infrontOfCasino(Scene):
     def __init__(self, group: list, opts=..., promt: str = "Kaszinó épülete igen csalogató. Beljebb fáradtsz?", sceneID="15A"):
         super().__init__(group, opts, promt, sceneID)
-        gameGlobals.globalPlayer.balance += 200
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
             case 0: # Igen benézek
                 gameGlobals.globalGame.setScene("16A")
             case 1: # Nem tovább állok
-                pass
+                gameGlobals.globalGame.setScene("22A")
 
 class insideTheCasino(Scene):
     def __init__(self, group: list, opts=..., promt: str = "A kaszinóba belépve mihez kezdesz?", sceneID="16A"):
         super().__init__(group, opts, promt, sceneID)
-        gameGlobals.globalPlayer.balance += 200
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
@@ -156,24 +164,23 @@ class insideTheCasino(Scene):
 class lookAroundTheCasino(Scene):
     def __init__(self, group: list, opts=..., promt: str = "Az épületben szemlélve megpillantasz egy lépcsőházat és egy liftet. Melyikkel próbálkozol?", sceneID="17A"):
         super().__init__(group, opts, promt, sceneID)
-        gameGlobals.globalPlayer.balance += 200
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
             case 0: # Felmész a lifttel
-                gameGlobals.globalGame.setScene("17A")
+                gameGlobals.globalGame.setScene("18A")
             case 1: # Leszöksz a lépcsőkön át.
                 gameGlobals.globalGame.setScene("19A")
 
 class goUpWithLift(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "Egészen a legfelső szintig felmész és megpillantasz egy bárt.", sceneID="17A"):
+    def __init__(self, group: list, opts=..., promt: str = "Egészen a legfelső szintig felmész és megpillantasz egy bárt.", sceneID="18A"):
         super().__init__(group, opts, promt, sceneID)
-        gameGlobals.globalPlayer.balance += 200
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
             case 0: # Bemész a bárba
-                gameGlobals.globalGame.setScene("18A") # Dögire iszod magad
+                gameGlobals.globalPlayer.hurt(80)
+                gameGlobals.globalGame.setScene("1A") # Dögire iszod magad
             case 1: # Inkább lemész a lepcsőkön
                 gameGlobals.globalGame.setScene("19A")
 
@@ -184,10 +191,10 @@ class goDownWithStairs(Scene):
         global gameGlobals
         match self.selectedItem:
             case 0: # Megpróbálod kinyitni
-                gameGlobals.globalGame.setScene("19A")
+                gameGlobals.globalGame.setScene("21A")
 
 class trySafe(inputCodeScene):
-    def __init__(self, group: list, promt: str = "", sceneID="19A", nextGoodID: str = "20A", nextBadID: str = "21A"):
+    def __init__(self, group: list, promt: str = "", sceneID="19A", nextGoodID: str = "20A", nextBadID: str = "22A"):
         super().__init__(group, promt, sceneID, nextGoodID, nextBadID)
 
 class canOpenIt(Scene):
@@ -209,7 +216,7 @@ class cannotOpenIt(Scene):
                 gameGlobals.globalGame.setScene("2E")
 
 class jailEnding(Scene):
-    def __init__(self, group: list, opts=["..."], promt: str = "Rácsok mögé zárva elgondolkozol hol rontottad el.\n VÉGE", sceneID="2E"):
+    def __init__(self, group: list, opts=["..."], promt: str = "Rácsok mögé zárva elgondolkozol hol rontottad el.\nVÉGE", sceneID="2E"):
         super().__init__(group, opts, promt, sceneID)
     def nextScene(self):
         global gameGlobals
@@ -218,10 +225,76 @@ class jailEnding(Scene):
                 gameGlobals.globalKey = "quit"
 
 class wealthyEnding(Scene):
-    def __init__(self, group: list, opts=["..."], promt: str = "Meggazdagodva Hawaii-i nyaralódba húzodtsz meg.\n VÉGE", sceneID="3E"):
+    def __init__(self, group: list, opts=["..."], promt: str = "Meggazdagodva Hawaii-i nyaralódba húzodtsz meg.\nVÉGE", sceneID="3E"):
         super().__init__(group, opts, promt, sceneID)
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
             case 0:
                 gameGlobals.globalKey = "quit"
+
+class alleyScene(Scene):
+    def __init__(self, group: list, opts=["TÁMADÁááÁÁÁS! >:O"], promt: str = "Egy sikátorba kötsz ki ahol megtalálnak a hídről az emberek.\nNincs menekvés megkell velük küzdened!", sceneID="23A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # Támadás
+                if (gameGlobals.globalPlayer.hasWeapon): 
+                    if (randint(0, 1) == 1): gameGlobals.globalGame.setScene("24A")
+                    else: gameGlobals.globalGame.setScene("25A")
+                else: gameGlobals.globalGame.setScene("7B") # elvernek mert nincs fegyver
+
+class alleyGoodScene(Scene):
+    def __init__(self, group: list, opts=["Tovább állok."], promt: str = "Mivel felfegyverkeztél ezért eltudsz velük bánni.\nTalálsz náluk kis pénzt.", sceneID="24A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        gameGlobals.globalPlayer.balance += 1200
+        match self.selectedItem:
+            case 0: # Támadás
+                gameGlobals.globalGame.setScene("13A")
+
+class alleyBadScene(Scene):
+    def __init__(self, group: list, opts=["..."], promt: str = "Felfegyverkeztél, de nem tudsz mindegyikkel elbánni.", sceneID="25A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # meghalsz
+                gameGlobals.globalGame.setScene("7B")
+
+class rouletteScene(Scene):
+    def __init__(self, group: list, promt: str = "Leültél egy roulett asztalhoz. Éppen kezdődik a játék mire szeretnél rakni tétet?", sceneID="26A"):
+        super().__init__(group, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # meghalsz
+                pass
+            case 1:
+                pass
+            case 2:
+                pass
+            case 3:
+                pass
+            case 4:
+                pass
+
+class rouletteScene(Scene):
+    def __init__(self, group: list, promt: str = "Leültél egy roulett asztalhoz. Éppen kezdődik a játék mire szeretnél rakni tétet?", sceneID="26A"):
+        super().__init__(group, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # meghalsz
+                pass
+            case 1:
+                pass
+            case 2:
+                pass
+            case 3:
+                pass
+            case 4:
+                pass
+
