@@ -1,4 +1,4 @@
-from scene import *
+from scene import Scene, waitScene
 from globals import gameGlobals
 from random import randint
 
@@ -41,8 +41,8 @@ class startScene(Scene):
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
-            case 0: # Kikászálódsz a sikátorból
-                gameGlobals.globalGame.setScene("2A") 
+            case 0:
+                gameGlobals.globalGame.setScene("2A")
 
 class stareScene(Scene):
     def __init__(self, group: list, opts=..., promt: str = "Egy ember nagyon az irányodba néz", sceneID="2A"):
@@ -50,9 +50,9 @@ class stareScene(Scene):
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
-            case 0: # Nem foglalkozol vele...
+            case 0:
                 gameGlobals.globalGame.setScene("3A")
-            case 1: # Oda mész hozzá
+            case 1:
                 gameGlobals.globalGame.setScene("4A")
 
 
@@ -62,7 +62,7 @@ class runOrTakeScene(Scene):
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
-            case 0: # Elfutsz a pénzzel és inkább későbbre megtartod
+            case 0:
                 gameGlobals.globalPlayer.balance += 500
                 gameGlobals.globalGame.setScene("1C")
             case 1: # Megköszönöd, és egyből a boltba mész
@@ -76,13 +76,13 @@ class cityScene(Scene):
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
-            case 0: # Keresel egy fegyverboltot
+            case 0:
                 gameGlobals.globalPlayer.balance -= 500
                 gameGlobals.globalPlayer.hasWeapon = True
                 gameGlobals.globalGame.setScene("6A")
-            case 1: # Keresel egy éttermet
+            case 1:
                 gameGlobals.globalGame.setScene("7A")
-            case 2: # Keresel egy helyet ahol tudsz aludni.
+            case 2:
                 gameGlobals.globalGame.setScene("8A")
 
 class hotelScene(Scene):
@@ -204,16 +204,19 @@ class canOpenIt(Scene):
         global gameGlobals
         match self.selectedItem:
             case 0:
-                gameGlobals.globalGame.setScene("3E")
+                gameGlobals.globalGame.setScene("7A")
 
-class cannotOpenIt(Scene):
-    def __init__(self, group: list, opts=["..."], promt: str = "Balszerencsédre nem tudtad kitalálni az 'igen nehéz' kombinációt. Így észre vettek és a rendőrök már várnak rád.", sceneID="21A"):
+class hotelScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Befáradtsz Kolppo city egyik lepukkant motelébe.", sceneID="8A"):
         super().__init__(group, opts, promt, sceneID)
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
             case 0:
-                gameGlobals.globalGame.setScene("2E")
+                gameGlobals.globalGame.setScene("9A")
+            case 1:
+                if(randint(0, 2) == 2): gameGlobals.globalGame.setScene("10A")
+                else: gameGlobals.globalGame.setScene("11A")
 
 class jailEnding(Scene):
     def __init__(self, group: list, opts=["..."], promt: str = "Rácsok mögé zárva elgondolkozol hol rontottad el.\nVÉGE", sceneID="2E"):
@@ -222,7 +225,9 @@ class jailEnding(Scene):
         global gameGlobals
         match self.selectedItem:
             case 0:
-                gameGlobals.globalKey = "quit"
+                gameGlobals.globalPlayer.balance += 200
+
+
 
 class wealthyEnding(Scene):
     def __init__(self, group: list, opts=["..."], promt: str = "Meggazdagodva Hawaii-i nyaralódba húzodtsz meg.\nVÉGE", sceneID="3E"):

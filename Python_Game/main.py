@@ -18,7 +18,6 @@ class Game:
     def Start(self):
         global gameGlobals
         self.sceneList[self.sceneIndex].update()
-        
         while self.RUNINSTANCE:
             if(gameGlobals.globalKey == "quit"):
                 self.RUNINSTANCE = False
@@ -31,11 +30,7 @@ class Game:
             
             if self.sceneChange:
                 system('cls')
-                try:
-                    self.sceneList[self.sceneIndex].update()
-                except KeyError as err:
-                    print(f"[-] Can't change to scene : {self.sceneIndex} {err}")
-                    self.RUNINSTANCE = False
+                self.sceneList[self.sceneIndex].update()
                 self.sceneChange = False
             sleep(gameGlobals.FPS / 1000)
 
@@ -47,9 +42,13 @@ class Game:
                 print(f'[+] New scene index - {scene.sceneID}')
     
     def setScene(self, sceneIndex: int = -1):
-        self.sceneIndex = sceneIndex
-        if self.debug: print(f'[+] Changed the scene to - {sceneIndex}')
-        self.sceneChange = True
+        sceneList = list(self.sceneList.keys())
+        sceneLen = len(sceneList)
+        if(not ((sceneList.index(sceneIndex) + 1) > sceneLen)):
+            self.sceneIndex = sceneIndex
+            if self.debug: print(f'[+] Changed the scene to - {sceneIndex}')
+            self.sceneChange = True
+        elif self.debug: print("[-] Can't change scene already at last scene")
 def init():
     global gameGlobals
     gameGlobals.globalPlayer = Player()

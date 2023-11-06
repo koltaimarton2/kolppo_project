@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-10-25T09:24:33.256Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36" etag="MVe6B7fKZAs2bBT3hzAj" version="22.0.7" type="device">
+<mxfile host="app.diagrams.net" modified="2023-10-25T11:38:20.755Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36" etag="kixE8UZ790jevv6Gv38f" version="22.0.8" type="device">
   <diagram name="1 oldal" id="aO040an8WPxSiDpJnwPP">
-    <mxGraphModel dx="2206" dy="1215" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="10000" pageHeight="10000" math="0" shadow="0">
+    <mxGraphModel dx="1434" dy="790" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="10000" pageHeight="10000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -141,7 +141,7 @@
         <mxCell id="iGLvWWdYhNniaDWui6tA-51" value="Az övé volt elveszi a pénz." style="whiteSpace=wrap;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
           <mxGeometry x="2050" y="850" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="iGLvWWdYhNniaDWui6tA-55" value="Elmész a hídhoz." style="whiteSpace=wrap;html=1;rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+        <mxCell id="iGLvWWdYhNniaDWui6tA-55" value="Elmész a hídhoz." style="whiteSpace=wrap;html=1;rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="2415" y="760" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="iGLvWWdYhNniaDWui6tA-61" value="Jobbra vagy Balra mész" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
@@ -161,7 +161,7 @@
         <mxCell id="iGLvWWdYhNniaDWui6tA-73" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" source="iGLvWWdYhNniaDWui6tA-68" target="iGLvWWdYhNniaDWui6tA-72" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="iGLvWWdYhNniaDWui6tA-68" value="Megközelítenek veszélyes emberek és kérnek tőled pénz" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+        <mxCell id="iGLvWWdYhNniaDWui6tA-68" value="Megközelítenek veszélyes emberek és kérnek tőled pénz" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="2412.5" y="940" width="125" height="70" as="geometry" />
         </mxCell>
         <mxCell id="iGLvWWdYhNniaDWui6tA-77" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" source="iGLvWWdYhNniaDWui6tA-70" target="iGLvWWdYhNniaDWui6tA-76" edge="1">
@@ -173,7 +173,7 @@
         <mxCell id="iGLvWWdYhNniaDWui6tA-83" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" source="iGLvWWdYhNniaDWui6tA-72" target="iGLvWWdYhNniaDWui6tA-82" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="iGLvWWdYhNniaDWui6tA-72" value="Adsz nekik egy keveset." style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+        <mxCell id="iGLvWWdYhNniaDWui6tA-72" value="Adsz nekik egy keveset." style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="2575" y="945" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="iGLvWWdYhNniaDWui6tA-74" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" source="iGLvWWdYhNniaDWui6tA-68" target="iGLvWWdYhNniaDWui6tA-75" edge="1">
@@ -185,7 +185,7 @@
         <mxCell id="iGLvWWdYhNniaDWui6tA-81" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" source="iGLvWWdYhNniaDWui6tA-75" target="iGLvWWdYhNniaDWui6tA-80" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="iGLvWWdYhNniaDWui6tA-75" value="Oda adod az ellopott pénz és elslisszolsz." style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+        <mxCell id="iGLvWWdYhNniaDWui6tA-75" value="Oda adod az ellopott pénz és elslisszolsz." style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="2270" y="1020" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="iGLvWWdYhNniaDWui6tA-79" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" source="iGLvWWdYhNniaDWui6tA-76" target="iGLvWWdYhNniaDWui6tA-78" edge="1">
@@ -208,7 +208,7 @@
             <mxPoint x="2590" y="1360" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="iGLvWWdYhNniaDWui6tA-80" value="Elmész a városba." style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+        <mxCell id="iGLvWWdYhNniaDWui6tA-80" value="Elmész a városba." style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="2530" y="1220" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="iGLvWWdYhNniaDWui6tA-85" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" source="iGLvWWdYhNniaDWui6tA-82" target="iGLvWWdYhNniaDWui6tA-84" edge="1">
