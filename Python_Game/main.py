@@ -4,6 +4,7 @@ from os import system
 from globals import gameGlobals
 from LScenes import initScene
 from Kscene import InitKScene
+from Mscene import InitMscene
 from entity import Player
 
 class Game:
@@ -12,7 +13,7 @@ class Game:
         self.sceneList = {}
         self.debug = False
         self.sceneChange = True
-        self.sceneIndex = "19A"
+        self.sceneIndex = "1A"
 
     def Start(self):
         global gameGlobals
@@ -55,6 +56,7 @@ def init():
     gameGlobals.globalGame = Game()
     initScene()
     InitKScene()
+    InitMscene()
     gameGlobals.globalGame.Start()
 
 
