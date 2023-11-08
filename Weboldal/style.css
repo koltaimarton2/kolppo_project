@@ -180,3 +180,45 @@ a {
   background-color: #2a475e ;
   border: 0;
 }
+
+.logo {
+  height: 34px;
+  animation: rotation 5s infinite linear;
+
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(361deg);
+  }
+}
+.editor2 {
+  max-height: 300px;
+  text-align: left!important;
+  overflow: hidden!important;
+  margin-bottom: 0;
+  background-color: #0d1433!important;
+  color: #c7d5e0!important;
+  border-radius: 10px;
+}
+pre {
+  margin: 0;
+}
+.card-body {
+  padding-bottom: 0!important ;
+}
+.cardbody {
+  width: 100%;
+  margin: auto;
+  background: linear-gradient(45deg, rgb(5, 83, 99) 0%, rgba(11,3,45,1) 100%);  
+  color: #c7d5e0;
+  border: 0;
+}
+.button {
+  background-color: #2a475e;
+  color: #c7d5e0;
+  border: 0;
+}
