@@ -13,7 +13,7 @@ class Game:
         self.sceneList = {}
         self.debug = False
         self.sceneChange = True
-        self.sceneIndex = "1A"
+        self.sceneIndex = "26A"
 
     def Start(self):
         global gameGlobals
@@ -23,7 +23,7 @@ class Game:
             if(gameGlobals.globalKey == "quit"):
                 self.RUNINSTANCE = False
                 return
-            if msvcrt.kbhit():
+            if msvcrt.kbhit() and gameGlobals.globalKey == None:
                 gameGlobals.globalKey = bytes(msvcrt.getch())
                 system('cls')
                 self.sceneList[self.sceneIndex].handleSelect()
@@ -40,7 +40,7 @@ class Game:
             if self.debug:
                 print(f'[+] Added scene - {scene}')
                 print(f'[+] New scene index - {scene.sceneID}')
-    
+
     def setScene(self, sceneIndex: int = -1):
         sceneList = list(self.sceneList.keys())
         sceneLen = len(sceneList)
