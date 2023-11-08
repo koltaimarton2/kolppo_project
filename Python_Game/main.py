@@ -17,12 +17,12 @@ class Game:
 
     def Start(self):
         global gameGlobals
+
         self.sceneList[self.sceneIndex].update()
         while self.RUNINSTANCE:
             if(gameGlobals.globalKey == "quit"):
                 self.RUNINSTANCE = False
                 return
-
             if msvcrt.kbhit():
                 gameGlobals.globalKey = bytes(msvcrt.getch())
                 system('cls')
