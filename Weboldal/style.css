@@ -180,3 +180,18 @@ a {
   background-color: #2a475e ;
   border: 0;
 }
+
+.logo {
+  height: 34px;
+  animation: rotation 3s infinite linear;
+
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(361deg);
+  }
+}
