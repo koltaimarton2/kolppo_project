@@ -115,9 +115,7 @@ class inputBalScene(Scene):
 
     def nextScene(self):
         global gameGlobals
-        match self.selectedItem:
-            case 0:
-                gameGlobals.globalGame.setScene(self.nextID)
+        gameGlobals.globalGame.setScene(self.nextID)
 
 class inputCodeScene(Scene):
     def __init__(self, group: list, promt: str = "", sceneID="", nextGoodID:str = "", nextBadID:str = ""):
