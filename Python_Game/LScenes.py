@@ -154,7 +154,8 @@ class goOutHotelScene(Scene):
             case 0: # Jobbra mész
                 gameGlobals.globalGame.setScene("23A")
             case 1: # Balra mész
-                gameGlobals.globalGame.setScene("13A")
+                if gameGlobals.globalPlayer.balance <= 0: gameGlobals.globalGame.setScene("15A")
+                else: gameGlobals.globalGame.setScene("13A")
 
 class casinoScene(Scene):
     def __init__(self, group: list, opts=..., promt: str = "Egy kaszinó előtt kötsz ki.\nEgy furcsa ember megközelít, hogy adj neki pénzt amit ő megdupláz neked.", sceneID="13A"):
