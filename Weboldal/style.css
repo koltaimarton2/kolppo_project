@@ -198,14 +198,16 @@ a {
 .editor2 {
   max-height: 300px;
   text-align: left!important;
-  overflow: hidden!important;
   margin-bottom: 0;
   background-color: #0d1433!important;
   color: #c7d5e0!important;
   border-radius: 10px;
+  overflow-x: hidden!important;
+  border: 0!;
 }
 pre {
   margin: 0;
+  overflow-x: hidden;
 }
 .card-body {
   padding-bottom: 0!important ;
@@ -213,12 +215,15 @@ pre {
 .cardbody {
   width: 100%;
   margin: auto;
-  background: linear-gradient(45deg, rgb(5, 83, 99) 0%, rgba(11,3,45,1) 100%);  
+  background: linear-gradient(45deg, rgb(7, 38, 44) 0%, rgba(11,3,45,1) 100%);  
   color: #c7d5e0;
   border: 0;
 }
 .button {
-  background-color: #2a475e;
+  background-color: #0d1433!important;
   color: #c7d5e0;
   border: 0;
+}
+.col-xl-4 {
+  margin-bottom: 15px;
 }
