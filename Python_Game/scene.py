@@ -38,6 +38,7 @@ class Scene:
         for idx, opt in enumerate(self.opts):
             if(idx == self.select): print(f'{colors.bg.lightgrey}{colors.fg.black}{opt}{colors.reset}')
             else: print(opt)
+        print("\n")
         if(hasattr(gameGlobals, "globalPlayer")): gameGlobals.globalPlayer.getStats()
         gameGlobals.globalKey = None
 
@@ -162,6 +163,9 @@ class inputCodeScene(Scene):
         global gameGlobals
         if self.printedSlow:
             for char in self.promt:
+                stdout.write(char)
+                stdout.flush()
+                sleep(0.1)
                 if msvcrt.kbhit(): # skip slow text
                     skipKey = bytes(msvcrt.getch())
                     if skipKey == b'\r':
@@ -169,15 +173,12 @@ class inputCodeScene(Scene):
                         print(self.promt)
                         self.printedSlow = False
                         break
-                print(char, end="")
-                sleep(0.1)
-            print('\n')
             self.printedSlow = False
         else: 
             print(self.promt)
-            print("\n")
+            print('\n')
         for idx, opt in enumerate(self.opts):
-            if(idx == self.guessSelect): print(f'{colors.bg.lightgrey}{opt}{colors.reset}', end="")
+            if(idx == self.guessSelect): print(f'{colors.bg.lightgrey}{colors.fg.black}{opt}{colors.reset}', end="")
             else: print(opt, end="")
         print("\n")
         if(hasattr(gameGlobals, "globalPlayer")): gameGlobals.globalPlayer.getStats()

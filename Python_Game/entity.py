@@ -1,3 +1,5 @@
+from colors import colors
+
 class Entity:
     def __init__(self, HealthPoint: int = 100):
         self.isDead = False
@@ -23,6 +25,7 @@ class Player(Entity):
         self.selectedItem = 0
         self.balance = 1000
         self.hasWeapon = False
+        self.goodToGuy = False
         self.rouletteChoice = [-1, ""]
         self.rouletteAmount = 0
         self.rouletteMulti = 1
@@ -60,9 +63,12 @@ class Player(Entity):
         return f"{hp}{nothp}"
 
     def getStats(self):
-        print("-------------------------------------------------------")
-        print(f'Életerő:{self.getHpText()} Pénz: {self.balance} Ft.-')
-        print("-------------------------------------------------------")
+        statPromt = f"Életerő:{self.getHpText()} Pénz: {self.balance} Ft.-"
+        statFirst = "-------------------------------------------------------"
+        print(f"{colors.bg.green}{colors.fg.lightgrey}{statFirst}")
+        print(statPromt,end="")
+        print(" "*(len(statFirst)-len(statPromt)))
+        print(f"{statFirst}{colors.reset}")
 
 if __name__ == "__main__":
     jatekos = Player()
