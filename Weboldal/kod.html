@@ -20,16 +20,19 @@
         }
     </style>
 </head>
-<body >
+<body>
     <div class="m-4  " >
         <nav class="navbar navbar-expand-lg navbar-dark">
             
             <div class="container-fluid navi justify-content-center text-uppercase">
+                <!-- <a href="home.html" class="navbar-brand ms-5">
+                    <img src="logokicsi-removebg-preview.png"  height="34" alt="kolppo">
+                </a> -->
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" style="margin-right: auto;">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <a href="home.html" class="navbar-brand ">
-                    <img src="../pictures/logokicsi-removebg-preview.png"  height="34" alt="kolppo">
+                    <img src="../pictures/logokicsi-removebg-preview.png" alt="kolppo" class="logo">
                 </a>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav">
@@ -53,11 +56,11 @@
     
     <div class="container">
         <div class="row">
-            <div class="col-md-4 justify-content-center">
+            <div class="col-xl-4 col-md-6 col-sm-12 justify-content-center">
                 <div class="card cardbody text-center">
                     <div class="card-header">main.py</div>
                     <div class="card-body ">
-                        <pre><code class="python editor2">
+                        <pre><code contenteditable="true" spellcheck="false" class="python editor2">
 import msvcrt
 from time import sleep
 from os import system
@@ -125,78 +128,241 @@ init()
                     <div class="card-footer text-muted "><a href="#" class="btn button btn-primary">Nagyítás</a></div>
                   </div>
         
-            </div>
-            <div class="col-md-4 justify-content-center">
-                <div class="card cardbody text-center">
-                    <div class="card-header">scene.py</div>
-                    <div class="card-body ">
-                        <pre><code class="python editor2">
-                            <div class="col-md-4 justify-content-center">
-                                <div class="card cardbody text-center">
-                                    <div class="card-header">main.py</div>
-                                    <div class="card-body ">
-                                        <pre><code class="python editor2">
-                        import msvcrt
-                        from time import sleep
-                        from os import system
-                        from globals import gameGlobals
-                        from LScenes import initScene
-                        from Kscene import InitKScene
-                         from Mscene import InitMscene
-                         from entity import Player
-                        class Game:
-                            def __init__(self):
-                                self.RUNINSTANCE = True
-                                self.sceneList = {}
-                                self.debug = False
-                                self.sceneChange = True
-                                self.sceneIndex = "1A"
-                        
-                                def Start(self):
-                                    global gameGlobals
-                        
-                                    self.sceneList[self.sceneIndex].update()
-                                    while self.RUNINSTANCE:
-                                        if(gameGlobals.globalKey == "quit"):
-                                            self.RUNINSTANCE = False
-                                            return
-                                        if msvcrt.kbhit():
-                                            gameGlobals.globalKey = bytes(msvcrt.getch())
-                                            system('cls')
-                                            self.sceneList[self.sceneIndex].handleSelect()
-                        
-                                        if self.sceneChange:
-                                            system('cls')
-                                            self.sceneList[self.sceneIndex].update()
-                                            self.sceneChange = False
-                                        sleep(gameGlobals.FPS / 1000)
-                        
-                                def addScene(self, scenes: list = []):
-                                    for scene in scenes:
-                                        self.sceneList[scene.sceneID] = scene
-                                        if self.debug:
-                                            print(f'[+] Added scene - {scene}')
-                                            print(f'[+] New scene index - {scene.sceneID}')
-                        
-                                def setScene(self, sceneIndex: int = -1):
-                                    sceneList = list(self.sceneList.keys())
-                                    sceneLen = len(sceneList)
-                                    if(not ((sceneList.index(sceneIndex) + 1) > sceneLen)):
-                                        self.sceneIndex = sceneIndex
-                                        if self.debug: print(f'[+] Changed the scene to - {sceneIndex}')
-                                        self.sceneChange = True
-                                    elif self.debug: print("[-] Can't change scene already at last scene")
-                                def init():
-                                    global gameGlobals
-                                    gameGlobals.globalPlayer = Player()
-                                    gameGlobals.globalGame = Game()
-                                    initScene()
-                                    InitKScene()
-                                    InitMscene()
-                                    gameGlobals.globalGame.Start()
-                        if __name_ _ == "__main__":
-                        init()
-                                        </code>
+        </div>
+        <div class="col-xl-4 col-md-6 col-sm-12 justify-content-center">
+            <div class="card cardbody text-center">
+                <div class="card-header">scene.py</div>
+                <div class="card-body ">
+                    <pre><code class="python editor2 " spellcheck="false" contenteditable="true">
+from colors import colors
+from globals import gameGlobals
+from time import sleep
+import msvcrt
+from os import system
+from sys import stdout
+# import winsound
+
+class Scene:
+    def __init__(self, group: list, opts = ["Opt1", "Opt2"], promt: str = "Hello World", sceneID = ""):
+        self.opts = opts
+        self.promt = promt
+        self.printedSlow = True
+        self.sceneID = sceneID
+        group.append(self)
+        self.select = 0
+        self.selectedItem = -1
+        self.maxCount = len(self.opts)
+    def update(self):
+        global gameGlobals
+        if self.printedSlow:
+            for char in self.promt:
+                stdout.write(char)
+                stdout.flush()
+                sleep(0.1)
+                if msvcrt.kbhit(): # skip slow text
+                    skipKey = bytes(msvcrt.getch())
+                    if skipKey == b'\r':
+                        system('cls')
+                        print(self.promt)
+                        self.printedSlow = False
+                        break
+            self.printedSlow = False
+        else: 
+            print(self.promt)
+        print('\n')
+        self.plusThing()
+        for idx, opt in enumerate(self.opts):
+            if(idx == self.select): print(f'{colors.bg.lightgrey}{colors.fg.black}{opt}{colors.reset}')
+            else: print(opt)
+        if(hasattr(gameGlobals, "globalPlayer")): gameGlobals.globalPlayer.getStats()
+        gameGlobals.globalKey = None
+
+    def plusThing(self):
+        pass
+
+    def nextScene(self):
+        pass
+
+    def addOpts(self, optText: str = ""):
+        self.opts.append(optText)
+
+    def handleSelect(self):
+        global gameGlobals
+        if(hasattr(gameGlobals, "globalKey")):
+            match gameGlobals.globalKey:
+                case b's':
+                    if (self.select + 1) < self.maxCount: self.select += 1
+                    else: self.select = 0
+                    # winsound.Beep(800, 300)
+                    self.update()
+                case b'w':
+                    if ((self.select - 1) >= 0): self.select -= 1
+                    else: self.select = self.maxCount - 1
+                    # winsound.Beep(800, 300)
+                    self.update()
+                case b'q':
+                    gameGlobals.globalKey = "quit"
+                case b'\r':
+                    self.selectedItem = self.select
+                    self.select = 0
+                    # winsound.Beep(850, 300)
+                    self.printedSlow = True
+                    self.nextScene()
+                case _:
+                    self.update()
+        else: pass
+
+class waitScene(Scene):
+    def __init__(self, group: list, promt: str = "", sceneID="", nextID:str = "", opts=["..."]):
+        super().__init__(group, opts, promt, sceneID)
+        self.nextID = nextID
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                self.printedSlow = True
+                gameGlobals.globalGame.setScene(self.nextID)
+
+class inputBalScene(Scene):
+    def __init__(self, group: list, promt: str = "", sceneID="", nextID:str = ""):
+        self.nextID = nextID
+        self.amount = [100]
+        super().__init__(group, self.amount, promt, sceneID)
+
+    def handleSelect(self):
+        global gameGlobals
+        addAmount = 100
+        if(hasattr(gameGlobals, "globalKey")):
+            match gameGlobals.globalKey:
+                case b'w':
+                    if gameGlobals.globalPlayer.balance >= (self.amount[0] + addAmount): self.amount[0] += addAmount
+                    else: pass
+                    #print(f'Added to amount {self.amount[0]}')
+                    self.update()
+                case b's':
+                    if (self.amount[0] - addAmount) != 0: self.amount[0] -= addAmount
+                    else: pass
+                    #print(f'Taken from amount {self.amount[0]}')
+                    self.update()
+                case b'q':
+                    gameGlobals.globalKey = "quit"
+                case b'\r':
+                    self.doTheThing(self.amount[0])
+                    self.amount[0] = 100
+                    self.nextScene()
+                case _:
+                    self.update()
+        else: pass
+
+    def doTheThing(self, bal:int = 0):
+        pass
+
+    def nextScene(self):
+        global gameGlobals
+        gameGlobals.globalGame.setScene(self.nextID)
+
+class inputNumberScene(Scene):
+    def __init__(self, group: list, promt: str = "Hello World", sceneID=""):
+        self.number = [0]
+        super().__init__(group, self.number, promt, sceneID)
+    def handleSelect(self):
+        global gameGlobals
+        if(hasattr(gameGlobals, "globalKey")):
+            match gameGlobals.globalKey:
+                case b'w':
+                    if 35 >= (self.number[0] + 1): self.number[0] += 1
+                    else: pass
+                    self.update()
+                case b's':
+                    if (self.number[0] - 1) != 0: self.number[0] -= 1
+                    else: pass
+                    self.update()
+                case b'q':
+                    gameGlobals.globalKey = "quit"
+                case b'\r':
+                    self.printedSlow = True
+                    self.nextScene()
+                case _:
+                    self.update()
+        else: pass
+
+class inputCodeScene(Scene):
+    def __init__(self, group: list, promt: str = "", sceneID="", nextGoodID:str = "", nextBadID:str = ""):
+        self.nextIds = [nextGoodID, nextBadID]
+        self.codeGuess = [0, 0, 0, 0]
+        self.guessSelect = 0
+        self.guessRemaining = 3
+        super().__init__(group, self.codeGuess, promt, sceneID)
+
+    def update(self):
+        global gameGlobals
+        if self.printedSlow:
+            for char in self.promt:
+                if msvcrt.kbhit(): # skip slow text
+                    skipKey = bytes(msvcrt.getch())
+                    if skipKey == b'\r':
+                        system('cls')
+                        print(self.promt)
+                        self.printedSlow = False
+                        break
+                print(char, end="")
+                sleep(0.1)
+            print('\n')
+            self.printedSlow = False
+        else: 
+            print(self.promt)
+            print("\n")
+        for idx, opt in enumerate(self.opts):
+            if(idx == self.guessSelect): print(f'{colors.bg.lightgrey}{opt}{colors.reset}', end="")
+            else: print(opt, end="")
+        print("\n")
+        if(hasattr(gameGlobals, "globalPlayer")): gameGlobals.globalPlayer.getStats()
+
+    def handleSelect(self):
+        global gameGlobals
+        if(hasattr(gameGlobals, "globalKey")):
+            match gameGlobals.globalKey:
+                case b'w':
+                    if 9 >= (self.codeGuess[self.guessSelect] + 1): self.codeGuess[self.guessSelect] += 1
+                    else: self.codeGuess[self.guessSelect] = 0
+                    #print(f'Added to {self.guessSelect} plus one : new val {self.codeGuess[self.guessSelect]}')
+                    self.update()
+                case b's':
+                    if not((self.codeGuess[self.guessSelect] - 1) < 0): self.codeGuess[self.guessSelect] -= 1
+                    else: self.codeGuess[self.guessSelect] = 9
+                    #print(f'Taken from {self.guessSelect} minus one : new val {self.codeGuess[self.guessSelect]}')
+                    self.update()
+                case b'q':
+                    gameGlobals.globalKey = "quit"
+                case b'\r':
+                    self.guessSelect += 1
+                    #print(f'Gone to next {self.guessSelect}')
+                    if self.guessSelect == 4: 
+                        self.guessSelect = 0
+                        #print("Max guess")
+                        self.doTheThing()
+                    self.update()
+                case _:
+                    self.update()
+        else: pass
+
+    def doTheThing(self):
+        global gameGlobals
+        goodCode = False
+        if self.codeGuess[0] == 1 and self.codeGuess[1] == 2 and self.codeGuess[2] == 3 and self.codeGuess[3] == 4:
+            goodCode = True
+            #print("Good code")
+        if goodCode:
+            gameGlobals.globalGame.setScene(self.nextIds[0])
+            self.nextScene()
+        else: 
+            self.guessRemaining -= 1
+            self.codeGuess = [0, 0, 0, 0]
+            if self.guessRemaining == 0:
+                gameGlobals.globalGame.setScene(self.nextIds[1])
+                self.printedSlow = True
+            else:
+                self.promt = f"Helytelen kód! - Még maradt {self.guessRemaining}x próbálkozása."                                        </code>
                                         </pre>
                         
                                     </div>
@@ -204,6 +370,80 @@ init()
                                   </div>
                         
                             </div>
+            <div class="col-xl-4 col-md-6 col-sm-12 justify-content-center">
+                <div class="card cardbody text-center">
+                    <div class="card-header">entity.py</div>
+                    <div class="card-body ">
+                        <pre><code contenteditable="true" spellcheck="false" class="python editor2">
+class Entity:
+    def __init__(self, HealthPoint: int = 100):
+        self.isDead = False
+        self.hp = HealthPoint
+
+    def update(self):
+        pass
+
+    def hurt(self, attackDamage):
+        self.hp -= attackDamage
+        if(self.hp >= 0):
+            self.hp = 0
+            self.isDead = True
+
+    def heal(self, healAmount):
+        self.hp += healAmount
+        if(self.hp > 100):
+            self.hp = 100
+
+    class Player(Entity):
+    def __init__(self, HealthPoint: int = 20):
+        super().__init__(HealthPoint)
+        self.selectedItem = 0
+        self.balance = 1000
+        self.hasWeapon = False
+        self.rouletteChoice = [-1, ""]
+        self.rouletteAmount = 0
+        self.rouletteMulti = 1
+
+    def getRouletteChoice(self) -> str:
+        currRouletteChoice = self.rouletteChoice[1]
+        self.rouletteChoice[1] = ""
+        return currRouletteChoice
+
+    def getRouletteGame(self) -> str:
+        currRouletteChoice = self.rouletteChoice[0]
+        self.rouletteChoice[0] = -1
+        return currRouletteChoice
+
+    def setRouletteMulti(self, amount:int) -> None:
+        self.rouletteMulti = amount
+
+    def getRouletteMulti(self) -> int:
+        currRouletteMulti = self.rouletteMulti
+        self.rouletteMulti = 0
+        return currRouletteMulti
+
+    def setRouletteAmount(self, amount:int) -> None:
+        self.rouletteAmount = amount
+        self.balance -= self.rouletteAmount
+
+    def getRouletteAmount(self) -> int:
+        currRouletteChoice = self.rouletteAmount
+        self.rouletteAmount = 0
+        return currRouletteChoice
+
+    def getHpText(self):
+        hp = "#" * int((self.hp / 5))
+        nothp = "-" * int((10 - (self.hp / 5)))
+        return f"{hp}{nothp}"
+
+    def getStats(self):
+        print("-------------------------------------------------------")
+        print(f'Életerő:{self.getHpText()} Pénz: {self.balance} Ft.-')
+        print("-------------------------------------------------------")
+
+if __name__ == "__main__":
+jatekos = Player()
+jatekos.getStats()
                         </code>
                         </pre>
         
@@ -212,12 +452,727 @@ init()
                   </div>
         
             </div>
-            <div class="col-md-4"></div>
+        
         </div>
         <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4"></div>
-            <div class="col-md-4"></div>
+            <div class="col-xl-4 col-md-6 col-sm-12 justify-content-center">
+                <div class="card cardbody text-center">
+                    <div class="card-header">LScene.py</div>
+                    <div class="card-body ">
+                        <pre><code contenteditable="true" spellcheck="false" class="python editor2">
+from scene import *
+from globals import gameGlobals
+from random import randint
+
+def initScene():
+    global gameGlobals
+    scenes = []
+    startScene(scenes, ["Kikászálódsz a sikátorból"])   # 1A
+    stareScene(scenes, ["Nem foglalkozol vele...", "Oda mész hozzá"]) # 2A
+    comeScene = waitScene(scenes, "Oda jön hozzád", "3A", "4A") # 3A
+    runOrTakeScene(scenes, ["Elfutsz a pénzzel és inkább későbbre megtartod", "Megköszönöd, és egyből a boltba mész"]) # 4A
+    cityScene(scenes, ["Keresel egy fegyverboltot", "Keresel egy éttermet", "Keresel egy helyet ahol tudsz aludni."]) # 5A
+    weaponShopScene = waitScene(scenes, "Nem messze találtál egy fegyverboltot és felkészültél a további támadásokra.", "6A", "8A", ["Tovább állsz..."]) # 6A
+    restaurantScene = waitScene(scenes, "Elmentél egy étterembe megebédelni.", "7A", "8A") # 7A
+    hotelScene(scenes, ["Elrakod magad holnap reggelre.", "Körül nézel a hotelben."]) # 8A
+    sleepHotelScene = waitScene(scenes, ["Hamar elalszol az eseménydús nap után, és reggel újult erővel kelsz fel."], "9A", "12A") # 9A
+    lookAroundUnluckyScene = waitScene(scenes, ["Nem találtál semmit.\nEzért inkább úgy döntesz elrakod magad holnapra."], "10A", "12A") # 10A
+    lookAroundLuckyScene(scenes, ["Tovább állsz.."]) # 11A
+    goOutHotelScene(scenes, ["Jobbra mész", "Balra veszed az irányt"]) # 12A
+    casinoScene(scenes, ["Adsz neki valamennyi pénz", "Visszautasítod."]) # 13A
+    doubleItScene(scenes) # 14A
+    infrontOfCasino(scenes, ["Igen benézek", "Nem tovább állok"]) # 15A
+    insideTheCasino(scenes, ["Leülsz pokerezni", "Leülsz egy-két kör roulettre", "Körül nézel"]) # 16A
+    lookAroundTheCasino(scenes, ["Felmész a lifttel", "Leszöksz a lépcsőkön át."]) #17A
+    goUpWithLift(scenes, ["Bemész a bárba", "Inkább lemész a lepcsőkön"]) # 18A
+    goDownWithStairs(scenes, ["Megpróbálod kinyitni"]) # 19A
+    canOpenIt(scenes) # 20A
+    cannotOpenIt(scenes) # 21A
+    trySafe(scenes, "Szerencsére úgy tűnik nincs itt senki ezért oda sietsz és megpróbálód kinyitni.") # 22A
+    alleyScene(scenes) # 23A
+    alleyGoodScene(scenes) # 24A
+    alleyBadScene(scenes) # 25A
+    setRouletteAmount(scenes) # 26A
+    rouletteScene(scenes, ["Felek (1x)", "Tucatok (2x)", "Oszlopok (2x)", "Konkret szam (35x)", "Szinek (1x)"]) # 27A
+    rouletteHalf(scenes, ["Számsor első fele (1-18)", "Számsor második fele (19-36)"]) # R1
+    rouletteStacks(scenes, ["Első tucatra (1-12)", "Második tucatra (13-24)", "Harmadik tucatra (25-36)"])
+    rouletteColumn(scenes, ["Első oszlopra (1, 4, 7 ...)", "Második oszlopra (2, 5, 8 ...)", "Harmadik oszlopra (3, 6, 9 ...)"])
+    rouletteNumber(scenes)
+    rouletteColor(scenes, ["Fekete számokra", "Piros számokra"])
+    RoulettFinale(scenes, ["Folytatod a tét rakást", "Befejezed"])
+    jailEnding(scenes) # 2E
+    wealthyEnding(scenes) # 3E
+    gameGlobals.globalGame.addScene(scenes) 
+
+class startScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Felkelsz egy sikátorban nem tudva hogy, kerültél oda", sceneID="1A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("2A")
+
+class stareScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Egy ember nagyon az irányodba néz", sceneID="2A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("3A")
+            case 1:
+                gameGlobals.globalGame.setScene("4A")
+
+
+class runOrTakeScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Beszéltek\n(Megmondja, hogy tegnap éjjel látott elég rossz formában. Megkérdezi, hogy jól vagy-e, majd elküld a boltba, hogy vegyél magadnak valamit)", sceneID="4A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalPlayer.balance += 500
+                gameGlobals.globalGame.setScene("1C")
+            case 1: # Megköszönöd, és egyből a boltba mész
+                gameGlobals.globalPlayer.goodToGuy = True
+                gameGlobals.globalPlayer.heal(80)
+                gameGlobals.globalGame.setScene("1B")
+
+class cityScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Város elején kötsz ki.", sceneID="5A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalPlayer.balance -= 500
+                gameGlobals.globalPlayer.hasWeapon = True
+                gameGlobals.globalGame.setScene("6A")
+            case 1:
+                gameGlobals.globalGame.setScene("7A")
+            case 2:
+                gameGlobals.globalGame.setScene("8A")
+
+class hotelScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Befáradtsz Kolppo city egyik lepukkant motelébe.", sceneID="8A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # Elrakod magad holnap reggelre.
+                gameGlobals.globalGame.setScene("9A")
+            case 1: # Körül nézel a hotelben.
+                if(randint(0, 2) == 2): gameGlobals.globalGame.setScene("11A")
+                else: gameGlobals.globalGame.setScene("10A")
+
+class lookAroundLuckyScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Körül néztel a motelbe és találtál egy kis suskát.", sceneID="11A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalPlayer.balance += 200
+                gameGlobals.globalGame.setScene("12A")
+
+class goOutHotelScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Elhagyod a motelt és új irányt veszel.", sceneID="12A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # Jobbra mész
+                gameGlobals.globalGame.setScene("23A")
+            case 1: # Balra mész
+                gameGlobals.globalGame.setScene("13A")
+
+class casinoScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Egy kaszinó előtt kötsz ki.\nEgy furcsa ember megközelít, hogy adj neki pénzt amit ő megdupláz neked.", sceneID="13A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # Adsz neki
+                gameGlobals.globalGame.setScene("14A")
+            case 1: # Elutasítod
+                gameGlobals.globalGame.setScene("15A")
+
+class doubleItScene(inputBalScene):
+    def __init__(self, group: list, promt: str = "Mennyi pénzt áldozol fel?\n(W - emeled az összeget, S - csökkented az összeget)", sceneID="14A", nextID: str = "15A"):
+        super().__init__(group, promt, sceneID, nextID)
+    def doTheThing(self, bal):
+        global gameGlobals
+        gameGlobals.globalPlayer.balance += bal
+        self.nextScene()
+
+class infrontOfCasino(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Kaszinó épülete igen csalogató. Beljebb fáradtsz?", sceneID="15A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # Igen benézek
+                gameGlobals.globalGame.setScene("16A")
+            case 1: # Nem tovább állok
+                gameGlobals.globalGame.setScene("22A")
+
+class insideTheCasino(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "A kaszinóba belépve mihez kezdesz?", sceneID="16A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # Leülsz pokerezni
+                pass
+            case 1: # Leülsz egy-két kör roulettre
+                gameGlobals.globalGame.setScene("26A")
+            case 2: # Körül nézel
+                gameGlobals.globalGame.setScene("17A")
+
+class lookAroundTheCasino(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Az épületben szemlélve megpillantasz egy lépcsőházat és egy liftet. Melyikkel próbálkozol?", sceneID="17A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # Felmész a lifttel
+                gameGlobals.globalGame.setScene("18A")
+            case 1: # Leszöksz a lépcsőkön át.
+                gameGlobals.globalGame.setScene("19A")
+
+class goUpWithLift(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Egészen a legfelső szintig felmész és megpillantasz egy bárt.", sceneID="18A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # Bemész a bárba
+                gameGlobals.globalPlayer.hurt(80)
+                gameGlobals.globalGame.setScene("1A") # Dögire iszod magad
+            case 1: # Inkább lemész a lepcsőkön
+                gameGlobals.globalGame.setScene("19A")
+
+class goDownWithStairs(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Lefutsz a lépcsőkön a legalső szintig és egy kis széfet találsz őrizetlenül.", sceneID="19A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # Megpróbálod kinyitni
+                gameGlobals.globalGame.setScene("21A")
+
+class trySafe(inputCodeScene):
+    def __init__(self, group: list, promt: str = "", sceneID="19A", nextGoodID: str = "20A", nextBadID: str = "22A"):
+        super().__init__(group, promt, sceneID, nextGoodID, nextBadID)
+
+class cannotOpenIt(Scene):
+    def __init__(self, group: list, opts=["..."], promt: str = "Balszerencsédre nem tudtad kitalálni az 'igen nehéz' kombinációt. Így észre vettek és a rendőrök már várnak rád.", sceneID="21A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("2E")
+
+class canOpenIt(Scene):
+    def __init__(self, group: list, opts=["..."], promt: str = "Legnagyobb szerencsédre a széf kombinációja 1234 volt. Így sok pénzzel a zsebedbe elmenekülsz.", sceneID="20A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("7A")
+
+class hotelScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Befáradtsz Kolppo city egyik lepukkant motelébe.", sceneID="8A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("9A")
+            case 1:
+                if(randint(0, 2) == 2): gameGlobals.globalGame.setScene("10A")
+                else: gameGlobals.globalGame.setScene("11A")
+
+class jailEnding(Scene):
+    def __init__(self, group: list, opts=["..."], promt: str = "Rácsok mögé zárva elgondolkozol hol rontottad el.\nVÉGE", sceneID="2E"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalKey = "quit"
+
+class wealthyEnding(Scene):
+    def __init__(self, group: list, opts=["..."], promt: str = "Meggazdagodva Hawaii-i nyaralódba húzodtsz meg.\nVÉGE", sceneID="3E"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalKey = "quit"
+
+class alleyScene(Scene):
+    def __init__(self, group: list, opts=["TÁMADÁááÁÁÁS! >:O"], promt: str = "Egy sikátorba kötsz ki ahol megtalálnak a hídről az emberek.\nNincs menekvés megkell velük küzdened!", sceneID="23A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # Támadás
+                if (gameGlobals.globalPlayer.hasWeapon): 
+                    if (randint(0, 1) == 1): gameGlobals.globalGame.setScene("24A")
+                    else: gameGlobals.globalGame.setScene("25A")
+                else: gameGlobals.globalGame.setScene("7B") # elvernek mert nincs fegyver
+
+class alleyGoodScene(Scene):
+    def __init__(self, group: list, opts=["Tovább állok."], promt: str = "Mivel felfegyverkeztél ezért eltudsz velük bánni.\nTalálsz náluk kis pénzt.", sceneID="24A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        gameGlobals.globalPlayer.balance += 1200
+        match self.selectedItem:
+            case 0: # Támadás
+                gameGlobals.globalGame.setScene("13A")
+
+class alleyBadScene(Scene):
+    def __init__(self, group: list, opts=["..."], promt: str = "Felfegyverkeztél, de nem tudsz mindegyikkel elbánni.", sceneID="25A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # meghalsz
+                gameGlobals.globalGame.setScene("7B")
+
+class setRouletteAmount(inputBalScene):
+    def __init__(self, group: list, promt: str = "Leültél egy roulett asztalhoz.\nMennyit akarsz felrakni?", sceneID="26A", nextID:str = "27A"):
+        super().__init__(group, promt, sceneID, nextID)
+    def doTheThing(self, bal):
+        global gameGlobals
+        gameGlobals.globalPlayer.setRouletteAmount(bal)
+        self.nextScene()
+        
+
+class rouletteScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Éppen kezdődik a játék mire szeretnél rakni?", sceneID="27A"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # Felek (1x)
+                gameGlobals.globalPlayer.rouletteChoice[0] = 0
+                gameGlobals.globalGame.setScene("R1")
+            case 1: # "Tucatok (2x)
+                gameGlobals.globalPlayer.rouletteChoice[0] = 1
+                gameGlobals.globalGame.setScene("R2")
+            case 2: # Oszlopok (2x)
+                gameGlobals.globalPlayer.rouletteChoice[0] = 2
+                gameGlobals.globalGame.setScene("R3")
+            case 3: # Konkret szam (35x)
+                gameGlobals.globalPlayer.rouletteChoice[0] = 3
+                gameGlobals.globalGame.setScene("R4")
+            case 4: # Szinek (1x)
+                gameGlobals.globalPlayer.rouletteChoice[0] = 4
+                gameGlobals.globalGame.setScene("R5")
+
+class rouletteHalf(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Melyik félre rakod a tétet?", sceneID="R1"):
+        global gameGlobals
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        gameGlobals.globalPlayer.setRouletteMulti(1)
+        match self.selectedItem:
+            case 0: # Első fele
+                gameGlobals.globalPlayer.rouletteChoice[1] = "E"
+            case 1: # Második fele
+                gameGlobals.globalPlayer.rouletteChoice[1] = "M"
+        gameGlobals.globalGame.setScene("R6")
+
+class rouletteStacks(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Melyik tucatra rakod a tétet?", sceneID="R2"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        gameGlobals.globalPlayer.setRouletteMulti(2)
+        match self.selectedItem:
+            case 0: # Első tucat
+                gameGlobals.globalPlayer.rouletteChoice[1] = "A"
+            case 1: # Második tucat
+                gameGlobals.globalPlayer.rouletteChoice[1] = "B"
+            case 2: # Harmadik tucat
+                gameGlobals.globalPlayer.rouletteChoice[1] = "C"
+        gameGlobals.globalGame.setScene("R6")
+
+class rouletteColumn(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Melyik oszlopra rakod a tétet?", sceneID="R3"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        gameGlobals.globalPlayer.setRouletteMulti(2)
+        match self.selectedItem:
+            case 0: # Első oszlop
+                gameGlobals.globalPlayer.rouletteChoice[1] = "A"
+            case 1: # Második oszlop
+                gameGlobals.globalPlayer.rouletteChoice[1] = "B"
+            case 2: # Harmadik oszlop
+                gameGlobals.globalPlayer.rouletteChoice[1] = "C"
+        gameGlobals.globalGame.setScene("R6")
+
+class rouletteNumber(inputNumberScene):
+    def __init__(self, group: list, promt: str = "Melyik számra rakod a tétet?", sceneID="R4"):
+        super().__init__(group, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        gameGlobals.globalPlayer.setRouletteMulti(35)
+        gameGlobals.globalPlayer.rouletteChoice[1] = str(self.number[0])
+        gameGlobals.globalGame.setScene("R6")
+
+class rouletteColor(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Melyik félre rakod a tétet?", sceneID="R5"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals
+        gameGlobals.globalPlayer.setRouletteMulti(1)
+        match self.selectedItem:
+            case 0: # Piros számok
+                gameGlobals.globalPlayer.rouletteChoice[1] = "P"
+            case 1: # Fekete számok
+                gameGlobals.globalPlayer.rouletteChoice[1] = "F"
+        gameGlobals.globalGame.setScene("R6")        
+
+class RoulettFinale(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Nezzük a pörgetés eredményét!", sceneID="R6"):
+        super().__init__(group, opts, promt, sceneID)
+        self.runnedOne = True
+    
+    def plusThing(self):
+        global gameGlobals
+        if self.runnedOne:
+            self.loadingAnim()
+            multiplier = gameGlobals.globalPlayer.getRouletteMulti()
+            winnedAmount = gameGlobals.globalPlayer.getRouletteAmount()
+            addtoBalance = (winnedAmount * multiplier) + winnedAmount
+            wonGame = self.checkIfWin()
+            #print(f'Nyert-E : {wonGame}\nFelrakott tét : {winnedAmount}\nSzorzó : {multiplier}')
+            if wonGame:
+                gameGlobals.globalPlayer.balance += addtoBalance
+                self.promt = f'Gratula nyertél {addtoBalance} forintot!'
+            else: self.promt = f'Bakfitty, ez nem jött össze...\nVesztettél {addtoBalance} forintot!'
+            print('\n')
+            self.runnedOne = False
+        else: pass
+    
+    def nextScene(self):
+        global gameGlobals
+        self.runnedOne = True
+        self.prompt = "Nezzük a pörgetés eredményét!"
+        match self.selectedItem:
+            case 0: # Folytatás
+                gameGlobals.globalGame.setScene("26A")
+            case 1: # Inkább kiszállok
+                pass
+        
+    def loadingAnim(self) -> None:
+        for i in range(0, 9, 1):
+            if(i == 1 or i == 5 or i == 9):
+                print("Porgetes folyamatban .")
+                print("-")
+            elif(i == 2 or i == 6):
+                print("Porgetes folyamatban ..")
+                print("\ ")
+            elif (i == 3 or i == 7): 
+                print("Porgetes folyamatban ...")
+                print("|")
+            else:
+                print("Porgetes folyamatban .")
+                print("/")
+            sleep(0.3)
+            system('cls')    
+    
+    def checkIfWin(self) -> bool:
+        global gameGlobals
+        nyert = False
+        nyertesSzam = randint(0, 36)
+        valasztottJatek = gameGlobals.globalPlayer.getRouletteChoice()
+        valasztotMod = gameGlobals.globalPlayer.getRouletteGame()
+        #print(f'Választott játék : {valasztottJatek}\nNyertes Szám : {nyertesSzam}\nVálasztott mód: {valasztotMod}')
+        match valasztotMod:
+            case 0:
+                if (nyertesSzam >= 1 and nyertesSzam <= 18 and valasztottJatek == 'E') or (nyertesSzam >= 19 and nyertesSzam <= 36 and valasztottJatek == 'M') : nyert = True
+            case 1:
+                if( (nyertesSzam >= 1 and nyertesSzam <= 12 and valasztottJatek == 'A') or (nyertesSzam >= 13 and nyertesSzam <= 24 and valasztottJatek == 'B') or (nyertesSzam >= 25 and nyertesSzam <= 36 and valasztottJatek == 'C')): nyert = True
+            case 2:
+                if( ((nyertesSzam % 3) == 1 and valasztottJatek == 'A') or ((nyertesSzam % 3) == 2 and valasztottJatek == 'B') or ((nyertesSzam % 3) == 0 and valasztottJatek == 'C') or nyertesSzam != 0): nyert = True
+            case 3:
+                if(nyertesSzam == int(valasztottJatek)): nyert = True
+            case 4:
+                fekSzamok = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]
+                szamFekete = nyertesSzam in fekSzamok
+                if( (szamFekete == True and valasztottJatek == "F") or (szamFekete == False and valasztottJatek == "P")): nyert = True
+                    return nyert
+                        </code>
+                        </pre>
+        
+                    </div>
+                    <div class="card-footer text-muted "><a href="#" class="btn button btn-primary">Nagyítás</a></div>
+                  </div>
+        
+        </div>
+        <div class="col-xl-4 col-md-6 col-sm-12 justify-content-center">
+            <div class="card cardbody text-center">
+                <div class="card-header">KScene.py</div>
+                <div class="card-body ">
+                    <pre><code contenteditable="true" spellcheck="false" class="python editor2">
+from globals import gameGlobals
+from scene import Scene, waitScene
+def InitKScene():
+    global gameGlobals
+    scenes = []
+    ShopScene(scenes, ["Elmész a hídhoz", "Elmész a városba"] )
+    BridgeScene(scenes, ["Adsz nekik egy keveset", "Odaadod az összeset és elslisszolsz", "Hazudsz, hogy nincs pénzed"])
+    MoneyScene(scenes, ["Elutasítod", "Elfogadod"])
+    DinerScene(scenes, ["Vársz", "Inkább kiszöksz az ablakon"])
+    VEndingScene(scenes, ["Újrakezdés"])
+    FightScene(scenes, ["..."])
+    HospitalScene(scenes, ["Újrakezdés"])
+    gameGlobals.globalGame.addScene(scenes)
+class ShopScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Az életerőd 100-ra növekszik", sceneid = "1B"):
+        super().__init__(group, opts, promt, sceneid)
+    def __init__(self, group: list, opts=..., promt: str = "Az életerőd 100-ra növekszik", sceneid = "1B"):
+        super().__init__(group, opts, promt, sceneid)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("2B")
+            case 1:
+                gameGlobals.globalGame.setScene("5A")
+
+class BridgeScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "A hídon megközelítenek veszélyes emberek és pénzt kérnek tőled", sceneid = "2B"):
+        super().__init__(group, opts, promt, sceneid)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalPlayer.balance = 0
+                gameGlobals.globalGame.setScene("3B")
+            case 1:
+                gameGlobals.globalPlayer.balance -= 100
+                gameGlobals.globalGame.setScene("5A")
+            case 2:
+                gameGlobals.globalGame.setScene("6B")
+
+
+
+class MoneyScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Többet követelnek tőled, de szerencsére az ember aki adott neked pénzt megint kisegített. Csatlakozik hozzád az utadon, s meghív a házába.", sceneid = "3B"):
+        super().__init__(group, opts, promt, sceneid)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("5A")
+            case 1:
+                gameGlobals.globalGame.setScene("4B")
+
+class   DinerScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Bemész a házába és megkét, hogy várj rá az ebédlőben.", sceneid = "4B"):
+        super().__init__(group, opts, promt, sceneid)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("5B")
+            case 1:
+                gameGlobals.globalGame.setScene("5A")
+class VEndingScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Kiderül, hogy a szomszédod, íg megtudod a kilétedet, Názáréti Frigyes. VÉGE", sceneid = "5B"):
+        super().__init__(group, opts, promt, sceneid)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("1A")
+class FightScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Az ember aki felajánlotta pénz arra jön, és megmondja, hogy hazudsz. Majd a gyanús emberek szétvernek, így kórházban kötsz ki" , sceneid = "6B"):
+        super().__init__(group, opts, promt, sceneid)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("7B")
+
+
+class HospitalScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Felébredsz bekötözve, a nővér bejön ellátni és meg tudod a neved és származásod. VÉGE", sceneid = "7B"):
+        super().__init__(group, opts, promt, sceneid)
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0:
+                # gameGlobals.globalGame.
+                gameGlobals.globalGame.setScene("1A") 
+                    </code>
+                    </pre>
+    
+                </div>
+                <div class="card-footer text-muted "><a href="#" class="btn button btn-primary">Nagyítás</a></div>
+              </div>
+    
+    </div>
+    <div class="col-xl-4 col-md-6 col-sm-12 justify-content-center">
+        <div class="card cardbody text-center">
+            <div class="card-header">MScene.py</div>
+            <div class="card-body ">
+                <pre><code contenteditable="true" spellcheck="false" class="python editor2">
+from scene import *
+from globals import gameGlobals
+from random import randint
+def InitMscene():
+    global gameGlobals 
+    scene = []
+    
+    kezd(scene, ["..."])
+    jobal(scene, ["Jobb", "Bal"])
+    jobb1(scene, ["..."])
+    park(scene, ["Elrakod inkább magadnak", "A közelben álló embert megkérdezed, hogy az öve-e."])
+    kerdes1(scene, ["Elmész a tóhoz."])
+    kerdes2(scene, ["Elmész a tóhoz."])
+    elrak(scene, ["Elmész a tóhoz."])
+    tav(scene, ["Bedobsz egy kis aprót a tóba.", "Elmész a városba"])
+    wish(scene, ["Pia", "Más utat", "A választ arra hogy ki vagy"])
+    vegeB(scene, ["..."])
+
+    gameGlobals.globalGame.addScene(scene)
+
+
+class kezd(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Nem növekszik az életerőd, de legalább nagyobb suskád lesz.", sceneID="1C"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals 
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("2C")
+
+class jobal(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Jobbra vagy Balra mész?", sceneID="2C"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals 
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("3C")
+            case 1:
+                gameGlobals.globalGame.setScene("2B")
+
+class jobb1(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Elmész a parkba.", sceneID="3C"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals 
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("4C")
+
+class park(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Találsz a földön pénz.", sceneID="4C"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals 
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalGame.setScene("5C")
+            case 1:
+                
+
+                if randint(0,1) == 1:
+                    gameGlobals.globalGame.setScene("6C")
+                else:
+                    gameGlobals.globalGame.setScene("7C")
+
+class kerdes1(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Nem az öve, megkapod a pénz", sceneID="6C"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals 
+        match self.selectedItem:
+            case 0:
+                gameGlobals.globalPlayer.balance += 100
+                gameGlobals.globalGame.setScene("8C")
+
+class kerdes2(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Az övé volt elveszi a pénz.", sceneID="7C"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals 
+        match self.selectedItem:
+            case 0:
+                
+                gameGlobals.globalGame.setScene("8C")
+
+class elrak(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Elraktad a pénzt sikeresen.", sceneID="5C"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals 
+        match self.selectedItem:
+            case 0:
+                
+                gameGlobals.globalGame.setScene("8C")
+
+class tav(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Hogy cselekedsz most?", sceneID="8C"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals 
+        match self.selectedItem:
+            case 0:
+                
+                gameGlobals.globalGame.setScene("9C")
+
+            case 1:
+                gameGlobals.globalGame.setScene("5A")
+
+class wish(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Mit kívánsz?", sceneID="9C"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals 
+        match self.selectedItem:
+            case 0:
+                
+                gameGlobals.globalGame.setScene("1A")
+
+            case 1:
+                gameGlobals.globalGame.setScene("2B")
+
+            case 2:
+                gameGlobals.globalGame.setScene("10C")
+            
+class vegeB(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Megjelenik az ember aki segített és kiderül ki is vagy valójában.", sceneID="10C"):
+        super().__init__(group, opts, promt, sceneID)
+    def nextScene(self):
+        global gameGlobals 
+        match self.selectedItem:
+            case 0:
+                
+                gameGlobals.globalKey = "quit"
+
+                            
+                </code>
+                </pre>
+
+            </div>
+            <div class="card-footer text-muted "><a href="#" class="btn button btn-primary">Nagyítás</a></div>
+          </div>
+
+</div>
             
             
             
@@ -225,6 +1180,6 @@ init()
     </div>
     
     
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <script src="underline.js"></script>
 </body>
