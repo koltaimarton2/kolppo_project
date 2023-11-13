@@ -34,10 +34,15 @@ class Scene:
         else: 
             print(self.promt)
         print('\n')
+        self.plusThing()
         for idx, opt in enumerate(self.opts):
             if(idx == self.select): print(f'{colors.bg.lightgrey}{colors.fg.black}{opt}{colors.reset}')
             else: print(opt)
         if(hasattr(gameGlobals, "globalPlayer")): gameGlobals.globalPlayer.getStats()
+        gameGlobals.globalKey = None
+
+    def plusThing(self):
+        pass
 
     def nextScene(self):
         pass
@@ -65,6 +70,7 @@ class Scene:
                     self.selectedItem = self.select
                     self.select = 0
                     # winsound.Beep(850, 300)
+                    self.printedSlow = True
                     self.nextScene()
                 case _:
                     self.update()
@@ -78,6 +84,7 @@ class waitScene(Scene):
         global gameGlobals
         match self.selectedItem:
             case 0:
+                self.printedSlow = True
                 gameGlobals.globalGame.setScene(self.nextID)
 
 class inputBalScene(Scene):
@@ -94,30 +101,54 @@ class inputBalScene(Scene):
                 case b'w':
                     if gameGlobals.globalPlayer.balance >= (self.amount[0] + addAmount): self.amount[0] += addAmount
                     else: pass
-                    print(f'Added to amount {self.amount[0]}')
+                    #print(f'Added to amount {self.amount[0]}')
                     self.update()
                 case b's':
                     if (self.amount[0] - addAmount) != 0: self.amount[0] -= addAmount
                     else: pass
-                    print(f'Taken from amount {self.amount[0]}')
+                    #print(f'Taken from amount {self.amount[0]}')
                     self.update()
                 case b'q':
                     gameGlobals.globalKey = "quit"
                 case b'\r':
                     self.doTheThing(self.amount[0])
+                    self.amount[0] = 100
                     self.nextScene()
                 case _:
                     self.update()
         else: pass
 
-    def doTheThing(self, bal):
+    def doTheThing(self, bal:int = 0):
         pass
 
     def nextScene(self):
         global gameGlobals
-        match self.selectedItem:
-            case 0:
-                gameGlobals.globalGame.setScene(self.nextID)
+        gameGlobals.globalGame.setScene(self.nextID)
+
+class inputNumberScene(Scene):
+    def __init__(self, group: list, promt: str = "Hello World", sceneID=""):
+        self.number = [0]
+        super().__init__(group, self.number, promt, sceneID)
+    def handleSelect(self):
+        global gameGlobals
+        if(hasattr(gameGlobals, "globalKey")):
+            match gameGlobals.globalKey:
+                case b'w':
+                    if 35 >= (self.number[0] + 1): self.number[0] += 1
+                    else: pass
+                    self.update()
+                case b's':
+                    if (self.number[0] - 1) != 0: self.number[0] -= 1
+                    else: pass
+                    self.update()
+                case b'q':
+                    gameGlobals.globalKey = "quit"
+                case b'\r':
+                    self.printedSlow = True
+                    self.nextScene()
+                case _:
+                    self.update()
+        else: pass
 
 class inputCodeScene(Scene):
     def __init__(self, group: list, promt: str = "", sceneID="", nextGoodID:str = "", nextBadID:str = ""):
@@ -158,21 +189,21 @@ class inputCodeScene(Scene):
                 case b'w':
                     if 9 >= (self.codeGuess[self.guessSelect] + 1): self.codeGuess[self.guessSelect] += 1
                     else: self.codeGuess[self.guessSelect] = 0
-                    print(f'Added to {self.guessSelect} plus one : new val {self.codeGuess[self.guessSelect]}')
+                    #print(f'Added to {self.guessSelect} plus one : new val {self.codeGuess[self.guessSelect]}')
                     self.update()
                 case b's':
                     if not((self.codeGuess[self.guessSelect] - 1) < 0): self.codeGuess[self.guessSelect] -= 1
                     else: self.codeGuess[self.guessSelect] = 9
-                    print(f'Taken from {self.guessSelect} minus one : new val {self.codeGuess[self.guessSelect]}')
+                    #print(f'Taken from {self.guessSelect} minus one : new val {self.codeGuess[self.guessSelect]}')
                     self.update()
                 case b'q':
                     gameGlobals.globalKey = "quit"
                 case b'\r':
                     self.guessSelect += 1
-                    print(f'Gone to next {self.guessSelect}')
+                    #print(f'Gone to next {self.guessSelect}')
                     if self.guessSelect == 4: 
                         self.guessSelect = 0
-                        print("Max guess")
+                        #print("Max guess")
                         self.doTheThing()
                     self.update()
                 case _:
@@ -182,16 +213,17 @@ class inputCodeScene(Scene):
     def doTheThing(self):
         global gameGlobals
         goodCode = False
-
         if self.codeGuess[0] == 1 and self.codeGuess[1] == 2 and self.codeGuess[2] == 3 and self.codeGuess[3] == 4:
             goodCode = True
-            print("Good code")
+            #print("Good code")
         if goodCode:
             gameGlobals.globalGame.setScene(self.nextIds[0])
             self.nextScene()
         else: 
             self.guessRemaining -= 1
+            self.codeGuess = [0, 0, 0, 0]
             if self.guessRemaining == 0:
                 gameGlobals.globalGame.setScene(self.nextIds[1])
+                self.printedSlow = True
             else:
                 self.promt = f"Helytelen kód! - Még maradt {self.guessRemaining}x próbálkozása."

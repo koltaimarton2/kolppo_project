@@ -23,13 +23,27 @@ class Player(Entity):
         self.selectedItem = 0
         self.balance = 1000
         self.hasWeapon = False
-        self.rouletteChoice = ""
+        self.rouletteChoice = [-1, ""]
         self.rouletteAmount = 0
+        self.rouletteMulti = 1
 
     def getRouletteChoice(self) -> str:
-        currRouletteChoice = self.rouletteChoice
-        self.rouletteChoice = ""
+        currRouletteChoice = self.rouletteChoice[1]
+        self.rouletteChoice[1] = ""
         return currRouletteChoice
+    
+    def getRouletteGame(self) -> str:
+        currRouletteChoice = self.rouletteChoice[0]
+        self.rouletteChoice[0] = -1
+        return currRouletteChoice
+
+    def setRouletteMulti(self, amount:int) -> None:
+        self.rouletteMulti = amount
+
+    def getRouletteMulti(self) -> int:
+        currRouletteMulti = self.rouletteMulti
+        self.rouletteMulti = 0
+        return currRouletteMulti
 
     def setRouletteAmount(self, amount:int) -> None:
         self.rouletteAmount = amount
