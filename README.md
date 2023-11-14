@@ -13,12 +13,12 @@ A csoport tagjai:
 - Makkos Péter
   - MScene.py
   - home.html
-  - kod.html
   - kollaboratorok.html
+  - style.css
 - Koltai Márton Balázs
   - KScene.py
   - home.html
-  - kollaboratorok.html
-  - style.css, underline.js
+  - style.css
+  - underline.js
   - readme.md
 A játéknak több vége van, így  többször is ki tudod játszani.
