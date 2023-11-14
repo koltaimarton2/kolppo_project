@@ -21,4 +21,5 @@ A csoport tagjai:
   - style.css
   - underline.js
   - readme.md
+
 A játéknak több vége van, így  többször is ki tudod játszani.
