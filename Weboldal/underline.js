@@ -73,7 +73,7 @@ function changec(e) {
           console.log("OELEMENT: " + oElement);
         }
         else {
-          parent.style.width = "33%";
+          parent.style.width = oElement.style.width;
           console.log("OELEMENT: " + oElement);
 
           parent.children[0].children[1].children[0].children[0].style.maxHeight = oElement.children[0].children[1].children[0].children[0].style.maxHeight;
