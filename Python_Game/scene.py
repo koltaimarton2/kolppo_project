@@ -115,6 +115,7 @@ class inputBalScene(Scene):
                     self.doTheThing(self.amount[0])
                     self.amount[0] = 100
                     self.nextScene()
+                    self.printedSlow = False
                 case _:
                     self.update()
         else: pass
@@ -152,7 +153,7 @@ class inputNumberScene(Scene):
         else: pass
 
 class inputCodeScene(Scene):
-    def __init__(self, group: list, promt: str = "", sceneID="", nextGoodID:str = "", nextBadID:str = ""):
+    def __init__(self, group: list, promt: str = "Hello World", sceneID="", nextGoodID:str = "", nextBadID:str = ""):
         self.nextIds = [nextGoodID, nextBadID]
         self.codeGuess = [0, 0, 0, 0]
         self.guessSelect = 0

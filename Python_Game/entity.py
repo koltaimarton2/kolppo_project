@@ -27,8 +27,42 @@ class Player(Entity):
         self.hasWeapon = False
         self.goodToGuy = False
         self.rouletteChoice = [-1, ""]
-        self.rouletteAmount = 0
+        self.rouletteAmount = 100
         self.rouletteMulti = 1
+        self.BJDeck = []
+        self.currHand = []
+        self.DealerHand = []
+        self.wonBlackJack = -1
+        self.resetDeck()
+
+    def resetDeck(self):
+        self.BJDeck = []
+        self.currHand = []
+        self.DealerHand = []
+        isCurrColor = False
+        currColor = 'P'
+        gotToPicture = True
+        picIdx = 0
+        picture = ["J", "Q", "K", "A"]
+        for i in range(1, 5, 1):
+            if isCurrColor: currColor = 'P'
+            else: currColor = 'F'
+            for j in range(2, 15, 1):
+                if j >= 11 and j <= 14:
+                    self.BJDeck.append(f'{picture[picIdx]}{currColor}')
+                    if picIdx+1 < len(picture): picIdx += 1
+                    else: picIdx = 0
+                else: self.BJDeck.append(f'{j}{currColor}')
+            isCurrColor = not isCurrColor
+
+    def hitBlackJack(self, cardIdx:int, whoHit:int = 0):
+        match whoHit:
+            case 0:
+                self.currHand.append(self.BJDeck[cardIdx])
+            case 1:
+                self.DealerHand.append(self.BJDeck[cardIdx])
+        self.BJDeck.pop(cardIdx)
+        
 
     def getRouletteChoice(self) -> str:
         currRouletteChoice = self.rouletteChoice[1]
@@ -72,4 +106,10 @@ class Player(Entity):
 
 if __name__ == "__main__":
     jatekos = Player()
-    jatekos.getStats()
+    print(jatekos.BJDeck)
+    for i in range(1, len(jatekos.BJDeck)+1):
+        print(i, end=" ")
+    jatekos.BJDeck.pop(2)
+    print('\n')
+    for i in range(0, len(jatekos.BJDeck)+1):
+        print(i, end=" ")

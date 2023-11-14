@@ -6,25 +6,25 @@ def initScene():
     global gameGlobals
     scenes = []
     menuScene(scenes, ["Kezdés", "Weboldal", "Kilépés"]) # 0A
-    startScene(scenes, ["Kikászálódsz a sikátorból"])   # 1A
-    stareScene(scenes, ["Nem foglalkozol vele...", "Oda mész hozzá"]) # 2A
+    startScene(scenes, ["Kikászálódsz a sikátorból."])   # 1A
+    stareScene(scenes, ["Nem foglalkozol vele.", "Oda mész hozzá."]) # 2A
     comeScene = waitScene(scenes, "Oda jön hozzád", "3A", "4A") # 3A
-    runOrTakeScene(scenes, ["Elfutsz a pénzzel és inkább későbbre megtartod", "Megköszönöd, és egyből a boltba mész"]) # 4A
-    cityScene(scenes, ["Keresel egy fegyverboltot", "Keresel egy éttermet", "Keresel egy helyet ahol tudsz aludni."]) # 5A
+    runOrTakeScene(scenes, ["Elfutsz a pénzzel és inkább későbbre megtartod.", "Megköszönöd és egyből a boltba mész."]) # 4A
+    cityScene(scenes, ["Keresel egy fegyverboltot.", "Keresel egy éttermet", "Keresel egy helyet ahol tudsz aludni."]) # 5A
     weaponShopScene = waitScene(scenes, "Nem messze találtál egy fegyverboltot és felkészültél a további támadásokra.", "6A", "8A", ["Tovább állsz..."]) # 6A
     restaurantScene = waitScene(scenes, "Elmentél egy étterembe megebédelni.", "7A", "8A") # 7A
     hotelScene(scenes, ["Elrakod magad holnap reggelre.", "Körül nézel a hotelben."]) # 8A
     sleepHotelScene = waitScene(scenes, ["Hamar elalszol az eseménydús nap után, és reggel újult erővel kelsz fel."], "9A", "12A") # 9A
     lookAroundUnluckyScene = waitScene(scenes, ["Nem találtál semmit.\nEzért inkább úgy döntesz elrakod magad holnapra."], "10A", "12A") # 10A
     lookAroundLuckyScene(scenes, ["Tovább állsz.."]) # 11A
-    goOutHotelScene(scenes, ["Jobbra mész", "Balra veszed az irányt"]) # 12A
-    casinoScene(scenes, ["Adsz neki valamennyi pénz", "Visszautasítod."]) # 13A
+    goOutHotelScene(scenes, ["Jobbra indulsz el.", "Balra veszed az irányt."]) # 12A
+    casinoScene(scenes, ["Adsz neki valamennyi pénz.", "Visszautasítod."]) # 13A
     doubleItScene(scenes) # 14A
-    infrontOfCasino(scenes, ["Igen benézek", "Nem tovább állok"]) # 15A
-    insideTheCasino(scenes, ["Leülsz blackjackezni", "Leülsz egy-két kör roulettre", "Körül nézel"]) # 16A
-    lookAroundTheCasino(scenes, ["Felmész a lifttel", "Leszöksz a lépcsőkön át."]) #17A
-    goUpWithLift(scenes, ["Bemész a bárba", "Inkább lemész a lepcsőkön"]) # 18A
-    goDownWithStairs(scenes, ["Megpróbálod kinyitni"]) # 19A
+    infrontOfCasino(scenes, ["Igen benézek!", "Nem tovább állok."]) # 15A
+    insideTheCasino(scenes, ["Leülsz blackjackezni.", "Leülsz egy-két kör roulettre.", "Körül nézel."]) # 16A
+    lookAroundTheCasino(scenes, ["Felmész a lifttel.", "Leszöksz a lépcsőkön át."]) #17A
+    goUpWithLift(scenes, ["Bemész a bárba.", "Inkább lemész a lepcsőkön."]) # 18A
+    goDownWithStairs(scenes, ["Megpróbálod kinyitni."]) # 19A
     canOpenIt(scenes) # 20A
     cannotOpenIt(scenes) # 21A
     trySafe(scenes, "Szerencsére úgy tűnik nincs itt senki ezért oda sietsz és megpróbálód kinyitni.") # 22A
@@ -38,11 +38,16 @@ def initScene():
     rouletteColumn(scenes, ["Első oszlopra (1, 4, 7 ...)", "Második oszlopra (2, 5, 8 ...)", "Harmadik oszlopra (3, 6, 9 ...)"]) # R3
     rouletteNumber(scenes) # R4
     rouletteColor(scenes, ["Fekete számokra", "Piros számokra"]) # R5
-    RoulettFinale(scenes, ["Folytatod a tét rakást", "Befejezed"]) # R6
+    RoulettFinale(scenes, ["Folytatod a tét rakást B)", "Befejezed"]) # R6
     enoughGambling(scenes, ["Kimész a kaszinóból."]) # 28A
     policeScene(scenes) # 29A
     goAwayFromCasino(scenes, ["Befáradsz."]) # 30A
     policeStationScene(scenes, ["Beszélsz a recepcióssal."]) # 31A
+    setBlackJackAmount(scenes) # 32A
+    blackJackStartScene(scenes) # 33A
+    bustedScene(scenes, ["Jöhet a kövi kör B)", "Befejezed"]) # 34A
+    dealerBustedScene(scenes, ["Jöhet a kövi kör B)", "Befejezed"]) # 35A
+    checkBlackJack(scenes, ["Jöhet a kövi kör B)", "Befejezed"]) # 36A
     jailEnding(scenes) # 2E
     wealthyEnding(scenes) # 3E
     policeEnding(scenes) # 4E
@@ -74,7 +79,7 @@ class menuScene(Scene):
                 gameGlobals.globalKey = "quit"
 
 class startScene(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "Felkelsz egy sikátorban nem tudva, hogy kerültél oda", sceneID="1A"):
+    def __init__(self, group: list, opts=..., promt: str = "Felkelsz egy sikátorban nem tudva, hogy kerültél oda.", sceneID="1A"):
         super().__init__(group, opts, promt, sceneID)
     def nextScene(self):
         global gameGlobals
@@ -83,7 +88,7 @@ class startScene(Scene):
                 gameGlobals.globalGame.setScene("2A")
 
 class stareScene(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "Egy ember nagyon az irányodba néz", sceneID="2A"):
+    def __init__(self, group: list, opts=..., promt: str = "*Egy ember nagyon az irányodba néz*", sceneID="2A"):
         super().__init__(group, opts, promt, sceneID)
     def nextScene(self):
         global gameGlobals
@@ -95,7 +100,7 @@ class stareScene(Scene):
 
 
 class runOrTakeScene(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "Beszéltek\n\n(Megmondja, hogy tegnap éjjel látott elég rossz formában. Megkérdezi, hogy jól vagy-e, majd elküld a boltba, hogy vegyél magadnak valamit)", sceneID="4A"):
+    def __init__(self, group: list, opts=..., promt: str = "*Beszéltek*\n\Elmeséli milyen rossz formában látott tegnap és megkérdezi, hogy jól vagy-e. Elküld boltba sebtapaszért, amire meghívna.", sceneID="4A"):
         super().__init__(group, opts, promt, sceneID)
     def nextScene(self):
         global gameGlobals
@@ -169,7 +174,7 @@ class casinoScene(Scene):
                 gameGlobals.globalGame.setScene("15A")
 
 class doubleItScene(inputBalScene):
-    def __init__(self, group: list, promt: str = "Mennyi pénzt áldozol fel?\n(W - emeled az összeget, S - csökkented az összeget)", sceneID="14A", nextID: str = "15A"):
+    def __init__(self, group: list, promt: str = "Mennyi pénzt áldozol fel?", sceneID="14A", nextID: str = "15A"):
         super().__init__(group, promt, sceneID, nextID)
     def doTheThing(self, bal):
         global gameGlobals
@@ -194,7 +199,7 @@ class insideTheCasino(Scene):
         global gameGlobals
         match self.selectedItem:
             case 0: # Leülsz BlackJackezni
-                pass
+                gameGlobals.globalGame.setScene("32A")
             case 1: # Leülsz egy-két kör roulettre
                 gameGlobals.globalGame.setScene("26A")
             case 2: # Körül nézel
@@ -436,6 +441,7 @@ class RoulettFinale(Scene):
             else: self.promt = f'Bakfitty, ez nem jött össze...\nVesztettél {addtoBalance} forintot!'
             print('\n')
             self.runnedOne = False
+            print(self.prompt)
         else: pass
     
     def nextScene(self):
@@ -540,3 +546,215 @@ class policeEnding(Scene):
                 gameGlobals.globalKey = "quit"
             case 1: 
                 gameGlobals.globalGame.setScene("0A")
+
+class setBlackJackAmount(inputBalScene):
+    def __init__(self, group: list, promt: str = "Leültél egy blackjack asztalhoz.\nMennyit akarsz felrakni?", sceneID="32A", nextID:str = "33A"):
+        super().__init__(group, promt, sceneID, nextID)
+    def doTheThing(self, bal):
+        global gameGlobals
+        gameGlobals.globalPlayer.setRouletteAmount(bal)
+        self.nextScene()
+
+class blackJackStartScene(Scene):
+    def __init__(self, group: list, opts=["Hit", "Marad"], promt: str = "", sceneID="33A"):
+        global gameGlobals
+        super().__init__(group, opts, promt, sceneID)
+        self.currPlayer = gameGlobals.globalPlayer
+        self.currDecSize = len(self.currPlayer.BJDeck) - 1
+        self.currHandVal = 0
+        self.dealerHandVal = 0
+        self.dealerHit = False
+        self.defaultHit = True
+        self.pics = ["J", "Q", "K", "A"]
+    
+    def update(self):
+        global gameGlobals
+        self.currPlayer = gameGlobals.globalPlayer
+        self.currDecSize = len(self.currPlayer.BJDeck) - 1
+        self.plusThing()
+        for idx, Dealercard in enumerate(self.currPlayer.DealerHand):
+            if Dealercard.find('F') != -1:
+                currTextColor = [colors.bg.black, colors.fg.lightgrey]
+                currColor = 'F'
+            elif Dealercard.find('P') != -1: 
+                currColor = 'P'
+                currTextColor = [colors.bg.red, colors.fg.lightgrey]
+            if idx == 0: print(f'{currTextColor[0]}{currTextColor[1]}{Dealercard.strip(currColor)}', end=f'{colors.reset} ')
+            else: print("*", end=" ")
+        print('\n\n')
+        print(f'{colors.bg.blue}{colors.fg.lightgrey}{self.currPlayer.rouletteAmount}{colors.reset}')
+        print('\n\n')
+        for card in self.currPlayer.currHand:
+            if card.find('F') != -1:
+                currTextColor = [colors.bg.black, colors.fg.lightgrey]
+                currColor = 'F'
+            elif card.find('P') != -1: 
+                currColor = 'P'
+                currTextColor = [colors.bg.red, colors.fg.lightgrey]
+            print(f'{currTextColor[0]}{currTextColor[1]}{card.strip(currColor)}', end=f'{colors.reset} ')
+        print('\n')
+        print(f"{colors.bg.green}{colors.fg.lightgrey}Kártyák értéke: {self.currHandVal}{colors.reset}\n\n")
+        for idx, opt in enumerate(self.opts):
+            if(idx == self.select): print(f'{colors.bg.lightgrey}{colors.fg.black}{opt}{colors.reset}')
+            else: print(opt)
+        gameGlobals.globalKey = None
+        self.dealerAI()
+        print(self.dealerHandVal)
+        print(self.currDecSize)
+    
+    def plusThing(self):
+        if self.defaultHit:
+            self.currPlayer.hitBlackJack(randint(0, self.currDecSize))
+            self.currPlayer.hitBlackJack(randint(0, self.currDecSize), 1)
+            self.currPlayer.hitBlackJack(randint(0, self.currDecSize))
+            self.currPlayer.hitBlackJack(randint(0, self.currDecSize), 1)
+            self.playerHandVal()
+            self.defaultHit = False
+        self.playerHandVal()
+        self.dealerAI()
+
+    def dealerAI(self):
+        self.dealerHandVal = 0
+        for Dealercard in self.currPlayer.DealerHand:
+            if Dealercard.find('F') != -1: currColor = 'F'
+            elif Dealercard.find('P') != -1: currColor = 'P'
+            if Dealercard.strip(currColor) in self.pics:
+                if Dealercard.strip(currColor) == "A" and (self.dealerHandVal+10) > 21: self.dealerHandVal += 1
+                else: self.dealerHandVal += 10
+            else: self.dealerHandVal += int(Dealercard.strip(currColor))
+        if self.dealerHandVal >= 17 and self.dealerHandVal <= 21: self.dealerHit = False
+        elif self.dealerHandVal >= 12 and self.dealerHandVal <= 16 and randint(0, 1) == 0: self.dealerHit = True
+        else: self.dealerHit = True
+
+    def playerHandVal(self):
+        self.currHandVal = 0
+        for card in self.currPlayer.currHand:
+            if card.find('F') != -1: currColor = 'F'
+            elif card.find('P') != -1: currColor = 'P'
+            if card.strip(currColor) in self.pics: 
+                if card.strip(currColor) == "A" and (self.currHandVal+10) > 21: self.currHandVal += 1
+                else: self.currHandVal += 10
+            else: self.currHandVal += int(card.strip(currColor))
+
+    def resetGame(self):
+        self.currPlayer = gameGlobals.globalPlayer
+        self.currDecSize = len(self.currPlayer.BJDeck)
+        self.currHandVal = 0
+        self.dealerHandVal = 0
+        self.dealerHit = False
+        self.defaultHit = True
+        self.currPlayer.resetDeck()
+
+    def nextScene(self):
+        global gameGlobals
+        alreadyWon = False
+        if self.dealerHit: 
+            self.currPlayer.hitBlackJack(randint(0, self.currDecSize), 1)
+            self.dealerHit = False
+
+        match self.selectedItem:
+            case 0: # hit
+                self.currPlayer.hitBlackJack(randint(0, self.currDecSize))
+                self.playerHandVal()
+            case 1: # stay
+                self.dealerAI()
+                if (self.dealerHit == False): # Meg nézni az eredményt
+                    wonCash = self.currPlayer.getRouletteAmount()
+                    if self.currHandVal > self.dealerHandVal: 
+                        if len(self.currPlayer.currHand) == 2 and self.currHandVal == 21:
+                            self.currPlayer.balance += wonCash + int(wonCash * 1.5)
+                        else:
+                            self.currPlayer.balance += wonCash + int(wonCash * 2/3)
+                            self.currPlayer.wonBlackJack = 1
+                    elif self.currHandVal == self.dealerHandVal:
+                        self.currPlayer.balance += wonCash
+                        self.currPlayer.wonBlackJack = 2
+                    else: 
+                        self.currPlayer.wonBlackJack = 0
+                    self.resetGame()
+                    gameGlobals.globalGame.setScene("36A")
+                    alreadyWon = True
+                else: gameGlobals.globalGame.setScene("33A")
+        
+        if not alreadyWon:
+            if self.currHandVal > 21: # Busted
+                reset = self.currPlayer.getRouletteAmount()
+                self.resetGame()
+                gameGlobals.globalGame.setScene("34A")
+            elif self.dealerHandVal > 21: # Dealer Busted
+                wonCash = self.currPlayer.getRouletteAmount()
+                self.currPlayer.balance += wonCash + int(wonCash * 2/3)
+                self.resetGame()
+                gameGlobals.globalGame.setScene("35A")
+            else: gameGlobals.globalGame.setScene("33A")
+
+class bustedScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Vesztettél! Túl kabzsi voltál a kártyákkal.", sceneID="34A"):
+        super().__init__(group, opts, promt, sceneID)
+    
+    def nextScene(self):
+        global gameGlobals
+        
+        match self.selectedItem:
+            case 0: # Jöhet a kövi kör B)
+                gameGlobals.globalGame.setScene("32A")
+            case 1: # Befejezed
+                gameGlobals.globalGame.setScene("28A")
+
+class dealerBustedScene(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Nyertél! Az osztó besokalt.", sceneID="35A"):
+        super().__init__(group, opts, promt, sceneID)
+    
+    def nextScene(self):
+        global gameGlobals
+        match self.selectedItem:
+            case 0: # Jöhet a kövi kör B)
+                gameGlobals.globalGame.setScene("32A")
+            case 1: # Befejezed
+                gameGlobals.globalGame.setScene("28A")
+
+class checkBlackJack(Scene):
+    def __init__(self, group: list, opts=..., promt: str = "Nezzük az eredményt!", sceneID="36A"):
+        super().__init__(group, opts, promt, sceneID)
+        self.seenOnce = True
+    def update(self):
+        global gameGlobals
+        if self.seenOnce:
+            self.loadingAnim()
+            match gameGlobals.globalPlayer.wonBlackJack:
+                case 0:
+                    print(f'{colors.bg.red}{colors.fg.lightgrey}Vesztettél! A ház visz mindent.{colors.reset}')
+                case 1:
+                    print(f'{colors.bg.green}{colors.fg.lightgrey}Gratula! Nyertél.{colors.reset}')
+                case 2:
+                    print(f'{colors.bg.black}{colors.fg.lightgrey}Döntetlen.{colors.reset}')
+            print('\n\n')
+            sleep(0.1)
+            self.seenOnce = False
+            
+        for idx, opt in enumerate(self.opts):
+            if(idx == self.select): print(f'{colors.bg.lightgrey}{colors.fg.black}{opt}{colors.reset}')
+            else: print(opt)
+        gameGlobals.globalKey = None
+
+    def nextScene(self):
+        global gameGlobals
+        self.seenOnce = True
+        match self.selectedItem:
+            case 0: # Jöhet a kövi kör B)
+                gameGlobals.globalGame.setScene("32A")
+            case 1: # Befejezed
+                gameGlobals.globalGame.setScene("28A")
+
+    def loadingAnim(self) -> None:
+        for i in range(0, 9, 1):
+            if(i == 1 or i == 5 or i == 9):
+                print("-")
+            elif(i == 2 or i == 6):
+                print("\ ")
+            elif (i == 3 or i == 7): 
+                print("|")
+            else:
+                print("/")
+            sleep(0.3)
+            system('cls')    
