@@ -174,7 +174,7 @@ a {
   text-align: center;
   margin: auto;
 }
-.col-md-4 a {
+.col-md-6 a {
   display: block;
   margin: 0 auto;
   background-color: #2a475e ;
@@ -211,6 +211,7 @@ pre {
 }
 .card-body {
   padding-bottom: 0!important ;
+  width: 100%;
 }
 .cardbody {
   width: 100%;

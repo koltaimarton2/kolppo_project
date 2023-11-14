@@ -39,3 +39,60 @@ function getArraySum( arr ) {
   } );
   return sum;
 }
+
+
+var count = 0;
+var oElement;
+
+function changec(e) {
+  e = e || window.event;
+  var target = e.target || e.srcElement;
+  var parent = target.parentNode.parentNode.parentNode;
+  console.log(parent.parentNode);
+  console.log(parent.children[0]);
+  console.log(parent.children[0].children[1].children[0].children[0]);
+  count++;
+  console.log("COUNT:" + count);
+        if(count%2==1) {
+          parent.style.width = "100%";
+          var h = parent.parentNode.clientHeight * 1 + "px";
+          parent.parentNode.parentNode.style.height = h;
+          parent.parentNode.style.height = h;
+          parent.style.height = h;
+          parent.children[0].children[1].children[0].children[0].style.maxHeight = h;
+          parent.children[0].children[1].children[0].children[0].style.height = "100%";
+          parent.style.zIndex = 1000;
+          parent.style.display = "block";
+          var elements = document.getElementsByClassName("col-xl-4");
+          Array.prototype.forEach.call(elements, function(element) {
+            if(element != parent) {
+              element.style.display = "none";
+              oElement = element;
+            }
+          });
+          console.log("OELEMENT: " + oElement);
+        }
+        else {
+          parent.style.width = "33%";
+          console.log("OELEMENT: " + oElement);
+
+          parent.children[0].children[1].children[0].children[0].style.maxHeight = oElement.children[0].children[1].children[0].children[0].style.maxHeight;
+          parent.children[0].children[1].children[0].children[0].style.height = oElement.children[0].children[1].children[0].children[0].style.height;
+          parent.style.height = oElement.style.height;
+
+          parent.parentNode.parentNode.style.height = oElement.parentNode.parentNode.style.height;
+          parent.parentNode.style.height = oElement.parentNode.style.height;
+
+
+          parent.style.zIndex = 1000;
+          parent.style.display = "block";
+          var elements = document.getElementsByClassName("col-xl-4 ");
+          Array.prototype.forEach.call(elements, function(element) {
+            // Do stuff here
+            if(element != parent) {
+              console.log(element);
+              element.style.display = "block";
+            }
+          });
+        }
+}
