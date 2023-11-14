@@ -4,7 +4,7 @@ from time import sleep
 import msvcrt
 from os import system
 from sys import stdout
-# import winsound
+import winsound
 
 class Scene:
     def __init__(self, group: list, opts = ["Opt1", "Opt2"], promt: str = "Hello World", sceneID = ""):
@@ -29,6 +29,7 @@ class Scene:
                         system('cls')
                         print(self.promt)
                         self.printedSlow = False
+                        if not gameGlobals.muted: winsound.Beep(int(900*gameGlobals.soundLevel), 50)
                         break
             self.printedSlow = False
         else: 
@@ -58,21 +59,30 @@ class Scene:
                 case b's':
                     if (self.select + 1) < self.maxCount: self.select += 1
                     else: self.select = 0
-                    # winsound.Beep(800, 300)
+                    if not gameGlobals.muted: winsound.Beep(int(800*gameGlobals.soundLevel), 20)
                     self.update()
                 case b'w':
                     if ((self.select - 1) >= 0): self.select -= 1
                     else: self.select = self.maxCount - 1
-                    # winsound.Beep(800, 300)
+                    if not gameGlobals.muted: winsound.Beep(int(800*gameGlobals.soundLevel), 20)
                     self.update()
                 case b'q':
                     gameGlobals.globalKey = "quit"
                 case b'\r':
                     self.selectedItem = self.select
                     self.select = 0
-                    # winsound.Beep(850, 300)
+                    if not gameGlobals.muted: winsound.Beep(int(850*gameGlobals.soundLevel), 20)
                     self.printedSlow = True
                     self.nextScene()
+                case b'x':
+                    if (gameGlobals.soundLevel - 0.10) >= 0: gameGlobals.soundLevel -= 0.1
+                    self.update()
+                case b'y':
+                    if (gameGlobals.soundLevel + 0.10) <= 1: gameGlobals.soundLevel += 0.1
+                    self.update()
+                case b'm':
+                    gameGlobals.muted = not gameGlobals.muted
+                    self.update()
                 case _:
                     self.update()
         else: pass
@@ -103,17 +113,20 @@ class inputBalScene(Scene):
                     if gameGlobals.globalPlayer.balance >= (self.amount[0] + addAmount): self.amount[0] += addAmount
                     else: pass
                     #print(f'Added to amount {self.amount[0]}')
+                    if not gameGlobals.muted: winsound.Beep(int(800*gameGlobals.soundLevel), 20)
                     self.update()
                 case b's':
                     if (self.amount[0] - addAmount) != 0: self.amount[0] -= addAmount
                     else: pass
                     #print(f'Taken from amount {self.amount[0]}')
+                    if not gameGlobals.muted: winsound.Beep(int(800*gameGlobals.soundLevel), 20)
                     self.update()
                 case b'q':
                     gameGlobals.globalKey = "quit"
                 case b'\r':
                     self.doTheThing(self.amount[0])
                     self.amount[0] = 100
+                    if not gameGlobals.muted: winsound.Beep(int(850*gameGlobals.soundLevel), 20)
                     self.nextScene()
                     self.printedSlow = False
                 case _:
@@ -138,15 +151,18 @@ class inputNumberScene(Scene):
                 case b'w':
                     if 35 >= (self.number[0] + 1): self.number[0] += 1
                     else: pass
+                    if not gameGlobals.muted: winsound.Beep(int(800*gameGlobals.soundLevel), 20)
                     self.update()
                 case b's':
                     if (self.number[0] - 1) != 0: self.number[0] -= 1
                     else: pass
+                    if not gameGlobals.muted: winsound.Beep(int(800*gameGlobals.soundLevel), 20)
                     self.update()
                 case b'q':
                     gameGlobals.globalKey = "quit"
                 case b'\r':
                     self.printedSlow = True
+                    if not gameGlobals.muted: winsound.Beep(int(850*gameGlobals.soundLevel), 20)
                     self.nextScene()
                 case _:
                     self.update()
@@ -175,6 +191,7 @@ class inputCodeScene(Scene):
                         self.printedSlow = False
                         break
             self.printedSlow = False
+            print('\n')
         else: 
             print(self.promt)
             print('\n')
@@ -182,6 +199,7 @@ class inputCodeScene(Scene):
             if(idx == self.guessSelect): print(f'{colors.bg.lightgrey}{colors.fg.black}{opt}{colors.reset}', end="")
             else: print(opt, end="")
         print("\n")
+        gameGlobals.globalKey = None
         if(hasattr(gameGlobals, "globalPlayer")): gameGlobals.globalPlayer.getStats()
 
     def handleSelect(self):
@@ -192,11 +210,13 @@ class inputCodeScene(Scene):
                     if 9 >= (self.codeGuess[self.guessSelect] + 1): self.codeGuess[self.guessSelect] += 1
                     else: self.codeGuess[self.guessSelect] = 0
                     #print(f'Added to {self.guessSelect} plus one : new val {self.codeGuess[self.guessSelect]}')
+                    if not gameGlobals.muted: winsound.Beep(int(800*gameGlobals.soundLevel), 20)
                     self.update()
                 case b's':
                     if not((self.codeGuess[self.guessSelect] - 1) < 0): self.codeGuess[self.guessSelect] -= 1
                     else: self.codeGuess[self.guessSelect] = 9
                     #print(f'Taken from {self.guessSelect} minus one : new val {self.codeGuess[self.guessSelect]}')
+                    if not gameGlobals.muted: winsound.Beep(int(800*gameGlobals.soundLevel), 20)
                     self.update()
                 case b'q':
                     gameGlobals.globalKey = "quit"
@@ -207,6 +227,7 @@ class inputCodeScene(Scene):
                         self.guessSelect = 0
                         #print("Max guess")
                         self.doTheThing()
+                    if not gameGlobals.muted: winsound.Beep(int(850*gameGlobals.soundLevel), 20)
                     self.update()
                 case _:
                     self.update()

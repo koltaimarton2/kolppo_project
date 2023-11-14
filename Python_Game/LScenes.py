@@ -64,7 +64,9 @@ class menuScene(Scene):
             else: print(opt)
         gameGlobals.globalKey = None
         print("\n")
-        print(f"{colors.bg.green}{colors.fg.lightgrey}Választás: W-S\nKiválasztás/Skip: Enter\nKilépés: Q{colors.reset}") 
+        print(f"{colors.bg.green}{colors.fg.lightgrey}Választás: W-S               \nKilépés: Q                   \nKiválasztás/Skip: Enter      \nPittyogás hangereje: Y-X / M ")
+        if gameGlobals.muted: print(f'Hangerő: X                   {colors.reset}')
+        else: print(f'Hangerő: {int(gameGlobals.soundLevel*10)*"#"}{int(10-int(gameGlobals.soundLevel*10))*"-"}          {colors.reset}')
 
     def nextScene(self):
         global gameGlobals
@@ -100,12 +102,12 @@ class stareScene(Scene):
 
 
 class runOrTakeScene(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "*Beszéltek*\n\Elmeséli milyen rossz formában látott tegnap és megkérdezi, hogy jól vagy-e. Elküld boltba sebtapaszért, amire meghívna.", sceneID="4A"):
+    def __init__(self, group: list, opts=..., promt: str = "*Beszéltek*\nElmeséli milyen rossz formában látott tegnap és megkérdezi, hogy jól vagy-e. Elküld boltba sebtapaszért, amire meghívna.", sceneID="4A"):
         super().__init__(group, opts, promt, sceneID)
     def nextScene(self):
         global gameGlobals
         match self.selectedItem:
-            case 0:
+            case 0: # Elfutsz
                 gameGlobals.globalPlayer.balance += 500
                 gameGlobals.globalGame.setScene("1C")
             case 1: # Megköszönöd, és egyből a boltba mész
@@ -257,7 +259,7 @@ class canOpenIt(Scene):
         global gameGlobals
         match self.selectedItem:
             case 0:
-                gameGlobals.globalGame.setScene("7A")
+                gameGlobals.globalGame.setScene("3E")
 
 class hotelScene(Scene):
     def __init__(self, group: list, opts=..., promt: str = "Befáradtsz Kolppo city egyik lepukkant motelébe.", sceneID="8A"):
@@ -543,9 +545,9 @@ class policeEnding(Scene):
         global gameGlobals
         match self.selectedItem:
             case 0:
-                gameGlobals.globalKey = "quit"
-            case 1: 
                 gameGlobals.globalGame.setScene("0A")
+            case 1: 
+                gameGlobals.globalKey = "quit"
 
 class setBlackJackAmount(inputBalScene):
     def __init__(self, group: list, promt: str = "Leültél egy blackjack asztalhoz.\nMennyit akarsz felrakni?", sceneID="32A", nextID:str = "33A"):
