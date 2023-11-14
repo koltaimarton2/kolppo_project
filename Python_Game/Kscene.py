@@ -25,7 +25,7 @@ class ShopScene(Scene):
                 gameGlobals.globalGame.setScene("5A")
 
 class BridgeScene(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "A hídon megközelítenek veszélyes emberek és pénzt kérnek tőled", sceneid = "2B"):
+    def __init__(self, group: list, opts=..., promt: str = "A hídon gyanús emberek közelítenek meg, a suskádra hajtanak.", sceneid = "2B"):
         super().__init__(group, opts, promt, sceneid)
     def nextScene(self):
         global gameGlobals
@@ -53,7 +53,7 @@ class MoneyScene(Scene):
                 gameGlobals.globalGame.setScene("4B")
 
 class   DinerScene(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "Bemész a házába és megkét, hogy várj rá az ebédlőben.", sceneid = "4B"):
+    def __init__(self, group: list, opts=..., promt: str = "Elsétálsz vele a házához... Az ebédlőben hagy téged...", sceneid = "4B"):
         super().__init__(group, opts, promt, sceneid)
     def nextScene(self):
         global gameGlobals
@@ -63,7 +63,7 @@ class   DinerScene(Scene):
             case 1:
                 gameGlobals.globalGame.setScene("5A")
 class VEndingScene(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "Kiderül, hogy a szomszédod, íg megtudod a kilétedet, Názáréti Frigyes. VÉGE", sceneid = "5B"):
+    def __init__(self, group: list, opts=..., promt: str = "Kiderül, hogy a szomszédod, így megtudod a kilétedet, Názáréti Frigyes. VÉGE", sceneid = "5B"):
         super().__init__(group, opts, promt, sceneid)
     def nextScene(self):
         global gameGlobals
@@ -71,7 +71,7 @@ class VEndingScene(Scene):
             case 0:
                 gameGlobals.globalGame.setScene("1A")
 class FightScene(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "Az ember aki felajánlotta pénz arra jön, és megmondja, hogy hazudsz. Majd a gyanús emberek szétvernek, így kórházban kötsz ki" , sceneid = "6B"):
+    def __init__(self, group: list, opts=..., promt: str = "A téged korábban kisegítő ember arra találja magát, s megmondja, hogy hazudsz... A gazemberek szétvernek, így kórházban kötsz ki" , sceneid = "6B"):
         super().__init__(group, opts, promt, sceneid)
     def nextScene(self):
         global gameGlobals
@@ -81,7 +81,7 @@ class FightScene(Scene):
 
 
 class HospitalScene(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "Felébredsz bekötözve, a nővér bejön ellátni és meg tudod a neved és származásod. VÉGE", sceneid = "7B"):
+    def __init__(self, group: list, opts=..., promt: str = "Az egész tested be van kötözve, s minden testrészed iszonyatosan fáj. A gyomrod korog, s száraz a torkod. Egy nővér sétál be az ajtón, s megtudod ki vagy, Názáréti Frigyes. VÉGE", sceneid = "7B"):
         super().__init__(group, opts, promt, sceneid)
     def nextScene(self):
         global gameGlobals
