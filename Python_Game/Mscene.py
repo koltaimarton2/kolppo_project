@@ -124,13 +124,13 @@ class wish(Scene):
                 gameGlobals.globalGame.setScene("10C")
            
 class vegeB(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "Megjelenik az ember aki segített és kiderül ki is vagy valójában.", sceneID="10C"):
+    def __init__(self, group: list, opts=["Újrakezdés", "Kilépés"], promt: str = "Megjelenik az ember aki segített és kiderül ki is vagy valójában.\nVÉGE", sceneID="10C"):
         super().__init__(group, opts, promt, sceneID)
     def nextScene(self):
-        global gameGlobals 
+        global gameGlobals
         match self.selectedItem:
             case 0:
-                
+                gameGlobals.globalGame.setScene("0A")
+            case 1: 
                 gameGlobals.globalKey = "quit"
-
         
