@@ -3,13 +3,13 @@ from scene import Scene, waitScene
 def InitKScene():
     global gameGlobals
     scenes = []
-    ShopScene(scenes, ["Elmész a hídhoz", "Elmész a városba"] )
-    BridgeScene(scenes, ["Adsz nekik egy keveset", "Odaadod az összeset és elslisszolsz", "Hazudsz, hogy nincs pénzed"])
-    MoneyScene(scenes, ["Elutasítod", "Elfogadod"])
-    DinerScene(scenes, ["Vársz", "Inkább kiszöksz az ablakon"])
-    VEndingScene(scenes, ["Újrakezdés", "Kilépés"])
+    ShopScene(scenes, ["Elmész a hídhoz.", "Elmész a városba."] )
+    BridgeScene(scenes, ["Adsz nekik egy keveset.", "Odaadod az összeset és elslisszolsz.", "Hazudsz, hogy nincs pénzed."])
+    MoneyScene(scenes, ["Elutasítod.", "Elfogadod."])
+    DinerScene(scenes, ["Vársz.", "Inkább kiszöksz az ablakon."])
+    VEndingScene(scenes, ["Újrakezdés.", "Kilépés."])
     FightScene(scenes, ["..."])
-    HospitalScene(scenes, ["Újrakezdés", "Kilépés"])
+    HospitalScene(scenes, ["Újrakezdés.", "Kilépés."])
     gameGlobals.globalGame.addScene(scenes)
 class ShopScene(Scene):
     def __init__(self, group: list, opts=..., promt: str = "Az életerőd 100-ra növekszik", sceneid = "1B"):
