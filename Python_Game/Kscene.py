@@ -7,9 +7,9 @@ def InitKScene():
     BridgeScene(scenes, ["Adsz nekik egy keveset", "Odaadod az összeset és elslisszolsz", "Hazudsz, hogy nincs pénzed"])
     MoneyScene(scenes, ["Elutasítod", "Elfogadod"])
     DinerScene(scenes, ["Vársz", "Inkább kiszöksz az ablakon"])
-    VEndingScene(scenes, ["Újrakezdés"])
+    VEndingScene(scenes, ["Újrakezdés", "Kilépés"])
     FightScene(scenes, ["..."])
-    HospitalScene(scenes, ["Újrakezdés"])
+    HospitalScene(scenes, ["Újrakezdés", "Kilépés"])
     gameGlobals.globalGame.addScene(scenes)
 class ShopScene(Scene):
     def __init__(self, group: list, opts=..., promt: str = "Az életerőd 100-ra növekszik", sceneid = "1B"):
@@ -69,7 +69,9 @@ class VEndingScene(Scene):
         global gameGlobals
         match self.selectedItem:
             case 0:
-                gameGlobals.globalGame.setScene("1A")
+                gameGlobals.globalGame.setScene("0A")
+            case 1:
+                gameGlobals.globalKey = "quit"
 class FightScene(Scene):
     def __init__(self, group: list, opts=..., promt: str = "A téged korábban kisegítő ember arra találja magát, s megmondja, hogy hazudsz... A gazemberek szétvernek, így kórházban kötsz ki" , sceneid = "6B"):
         super().__init__(group, opts, promt, sceneid)
@@ -87,8 +89,9 @@ class HospitalScene(Scene):
         global gameGlobals
         match self.selectedItem:
             case 0:
-                # gameGlobals.globalGame.
+                gameGlobals.globalPlayer.hurt(2000)
                 gameGlobals.globalGame.setScene("1A")
-
+            case 1:
+                gameGlobals.globalKey = "quit"
 
 
