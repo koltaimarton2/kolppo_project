@@ -15,7 +15,7 @@ def initScene():
     restaurantScene = waitScene(scenes, "Elmentél egy étterembe megebédelni.", "7A", "8A") # 7A
     hotelScene(scenes, ["Elrakod magad holnap reggelre.", "Körül nézel a hotelben."]) # 8A
     sleepHotelScene = waitScene(scenes, ["Hamar elalszol az eseménydús nap után, és reggel újult erővel kelsz fel."], "9A", "12A") # 9A
-    lookAroundUnluckyScene = waitScene(scenes, ["Nem találtál semmit.\nEzért inkább úgy döntesz elrakod magad holnapra."], "10A", "12A") # 10A
+    lookAroundUnluckyScene = waitScene(scenes, "Nem találtál semmit.\nEzért inkább úgy döntesz elrakod magad holnapra.", "10A", "12A") # 10A
     lookAroundLuckyScene(scenes, ["Tovább állsz.."]) # 11A
     goOutHotelScene(scenes, ["Jobbra indulsz el.", "Balra veszed az irányt."]) # 12A
     casinoScene(scenes, ["Adsz neki valamennyi pénz.", "Visszautasítod."]) # 13A
@@ -87,6 +87,7 @@ class menuScene(Scene):
         currPlayer.currHand = []
         currPlayer.DealerHand = []
         currPlayer.wonBlackJack = -1
+        currPlayer.resetDeck()
 
     def nextScene(self):
         global gameGlobals
