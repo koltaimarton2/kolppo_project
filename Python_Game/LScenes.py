@@ -548,7 +548,7 @@ class goAwayFromCasino(Scene):
                 gameGlobals.globalGame.setScene("31A")
 
 class policeStationScene(Scene):
-    def __init__(self, group: list, opts=..., promt: str = "Rendőrség elég csendes. Csak egy recepciós üll a portán kivel szemkontaktust cserélsz.", sceneID="31A"):
+    def __init__(self, group: list, opts=..., promt: str = "Rendőrség elég csendes. Csak egy recepciós ül a portán kivel szemkontaktust cserélsz.", sceneID="31A"):
         super().__init__(group, opts, promt, sceneID)
     def nextScene(self):
         global gameGlobals
@@ -583,7 +583,7 @@ class blackJackStartScene(Scene):
         global gameGlobals
         super().__init__(group, opts, promt, sceneID)
         self.currPlayer = gameGlobals.globalPlayer
-        self.currDecSize = len(self.currPlayer.BJDeck) - 1
+        self.currDecSize = len(self.currPlayer.BJDeck)
         self.currHandVal = 0
         self.dealerHandVal = 0
         self.dealerHit = False
@@ -593,7 +593,7 @@ class blackJackStartScene(Scene):
     def update(self):
         global gameGlobals
         self.currPlayer = gameGlobals.globalPlayer
-        self.currDecSize = len(self.currPlayer.BJDeck) - 1
+        self.currDecSize = len(self.currPlayer.BJDeck)
         self.plusThing()
         for idx, Dealercard in enumerate(self.currPlayer.DealerHand):
             if Dealercard.find('F') != -1:
@@ -627,10 +627,10 @@ class blackJackStartScene(Scene):
     
     def plusThing(self):
         if self.defaultHit:
-            self.currPlayer.hitBlackJack(randint(0, self.currDecSize))
-            self.currPlayer.hitBlackJack(randint(0, self.currDecSize), 1)
-            self.currPlayer.hitBlackJack(randint(0, self.currDecSize))
-            self.currPlayer.hitBlackJack(randint(0, self.currDecSize), 1)
+            self.currPlayer.hitBlackJack(randint(0, self.currDecSize - 1))
+            self.currPlayer.hitBlackJack(randint(0, self.currDecSize - 1), 1)
+            self.currPlayer.hitBlackJack(randint(0, self.currDecSize - 1))
+            self.currPlayer.hitBlackJack(randint(0, self.currDecSize - 1), 1)
             self.playerHandVal()
             self.defaultHit = False
         self.playerHandVal()
@@ -643,6 +643,7 @@ class blackJackStartScene(Scene):
             elif Dealercard.find('P') != -1: currColor = 'P'
             if Dealercard.strip(currColor) in self.pics:
                 if Dealercard.strip(currColor) == "A" and (self.dealerHandVal+10) > 21: self.dealerHandVal += 1
+                elif Dealercard.strip(currColor) == "A": self.dealerHandVal += 11
                 else: self.dealerHandVal += 10
             else: self.dealerHandVal += int(Dealercard.strip(currColor))
         if self.dealerHandVal >= 17 and self.dealerHandVal <= 21: self.dealerHit = False
@@ -656,6 +657,7 @@ class blackJackStartScene(Scene):
             elif card.find('P') != -1: currColor = 'P'
             if card.strip(currColor) in self.pics: 
                 if card.strip(currColor) == "A" and (self.currHandVal+10) > 21: self.currHandVal += 1
+                elif card.strip(currColor) == "A": self.currHandVal += 11
                 else: self.currHandVal += 10
             else: self.currHandVal += int(card.strip(currColor))
 
@@ -672,7 +674,7 @@ class blackJackStartScene(Scene):
         global gameGlobals
         alreadyWon = False
         if self.dealerHit: 
-            self.currPlayer.hitBlackJack(randint(0, self.currDecSize), 1)
+            self.currPlayer.hitBlackJack(randint(0, self.currDecSize - 1), 1)
             self.dealerHit = False
 
         match self.selectedItem:
