@@ -602,7 +602,7 @@ class blackJackStartScene(Scene):
         gameGlobals.globalKey = None
         self.dealerAI()
         #print(self.dealerHandVal)
-        print(self.currDecSize)
+        #print(self.currDecSize)
     
     def plusThing(self):
         if self.defaultHit:
