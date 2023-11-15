@@ -55,9 +55,13 @@ def initScene():
 
 class menuScene(Scene):
     def __init__(self, group: list, opts=..., promt: str = f"---- {colors.bg.purple}{colors.fg.lightgrey}Kolppo City{colors.reset} ----", sceneID="0A"):
-        super().__init__(group, opts, promt, sceneID)   
+        super().__init__(group, opts, promt, sceneID)
+        self.canReset = False
     def update(self):
         global gameGlobals
+        if self.canReset:
+            self.resetGame()
+            self.canReset = False
         print(self.promt, end="\n\n")
         for idx, opt in enumerate(self.opts):
             if(idx == self.select): print(f'{colors.bg.lightgrey}{colors.fg.black}{opt}{colors.reset}')
@@ -67,6 +71,22 @@ class menuScene(Scene):
         print(f"{colors.bg.green}{colors.fg.lightgrey}Választás: W-S               \nKilépés: Q                   \nKiválasztás/Skip: Enter      \nPittyogás hangereje: Y-X / M ")
         if gameGlobals.muted: print(f'Hangerő: X                   {colors.reset}')
         else: print(f'Hangerő: {int(gameGlobals.soundLevel*10)*"#"}{int(10-int(gameGlobals.soundLevel*10))*"-"}          {colors.reset}')
+
+    def resetGame(self):
+        global gameGlobals
+        currPlayer = gameGlobals.globalPlayer
+        currPlayer.hp = 20
+        currPlayer.selectedItem = 0
+        currPlayer.balance = 1000
+        currPlayer.hasWeapon = False
+        currPlayer.goodToGuy = False
+        currPlayer.rouletteChoice = [-1, ""]
+        currPlayer.rouletteAmount = 100
+        currPlayer.rouletteMulti = 1
+        currPlayer.BJDeck = []
+        currPlayer.currHand = []
+        currPlayer.DealerHand = []
+        currPlayer.wonBlackJack = -1
 
     def nextScene(self):
         global gameGlobals
@@ -79,6 +99,7 @@ class menuScene(Scene):
                 system("start \"\" ..\Weboldal\home.html")
             case 2:
                 gameGlobals.globalKey = "quit"
+        self.canReset = True
 
 class startScene(Scene):
     def __init__(self, group: list, opts=..., promt: str = "Felkelsz egy sikátorban nem tudva, hogy kerültél oda.", sceneID="1A"):
@@ -440,10 +461,9 @@ class RoulettFinale(Scene):
             if wonGame:
                 gameGlobals.globalPlayer.balance += addtoBalance
                 self.promt = f'Gratula nyertél {addtoBalance} forintot!'
-            else: self.promt = f'Bakfitty, ez nem jött össze...\nVesztettél {addtoBalance} forintot!'
+            else: self.promt = f'Bakfitty, ez nem jött össze...\nVesztettél {winnedAmount} forintot!'
             print('\n')
             self.runnedOne = False
-            print(self.prompt)
         else: pass
     
     def nextScene(self):
@@ -471,7 +491,7 @@ class RoulettFinale(Scene):
                 print("Porgetes folyamatban .")
                 print("/")
             sleep(0.3)
-            system('cls')    
+            system('cls')
     
     def checkIfWin(self) -> bool:
         global gameGlobals
