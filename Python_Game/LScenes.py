@@ -45,9 +45,9 @@ def initScene():
     policeStationScene(scenes, ["Beszélsz a recepcióssal."]) # 31A
     setBlackJackAmount(scenes) # 32A
     blackJackStartScene(scenes) # 33A
-    bustedScene(scenes, ["Jöhet a kövi kör B)", "Befejezed"]) # 34A
-    dealerBustedScene(scenes, ["Jöhet a kövi kör B)", "Befejezed"]) # 35A
-    checkBlackJack(scenes, ["Jöhet a kövi kör B)", "Befejezed"]) # 36A
+    bustedScene(scenes, ["Jöhet a kövi kör! B)", "Befejezed."]) # 34A
+    dealerBustedScene(scenes, ["Jöhet a kövi kör! B)", "Befejezed."]) # 35A
+    checkBlackJack(scenes, ["Jöhet a kövi kör! B)", "Befejezed."]) # 36A
     jailEnding(scenes) # 2E
     wealthyEnding(scenes) # 3E
     policeEnding(scenes) # 4E
@@ -601,7 +601,7 @@ class blackJackStartScene(Scene):
             else: print(opt)
         gameGlobals.globalKey = None
         self.dealerAI()
-        print(self.dealerHandVal)
+        #print(self.dealerHandVal)
         print(self.currDecSize)
     
     def plusThing(self):
@@ -656,7 +656,8 @@ class blackJackStartScene(Scene):
 
         match self.selectedItem:
             case 0: # hit
-                self.currPlayer.hitBlackJack(randint(0, self.currDecSize))
+
+                self.currPlayer.hitBlackJack(randint(0, self.currDecSize-1))
                 self.playerHandVal()
             case 1: # stay
                 self.dealerAI()
